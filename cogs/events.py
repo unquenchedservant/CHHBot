@@ -245,7 +245,10 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         ref_msg = ""
-        channel_name = message.channel.name
+        if not isinstance(message.channel, discord.DMChannel):
+            channel_name = message.channel.name
+        else:
+            channel_name = "Direct Message"
         if message.reference is not None:
             calling_channel = self.bot.get_channel(message.channel.id)
             ref_msg_temp = await calling_channel.fetch_message(message.reference.message_id)
