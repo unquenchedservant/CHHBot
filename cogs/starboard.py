@@ -1,7 +1,9 @@
 from discord.ext import commands
 from utilities import Config
 from utilities.logging import logger
-from utilities.database import StarboardDB, Modboard, StarboardSettings
+from models.starboard import StarboardSettings
+from models.starboard import Modboard
+from models.starboard import StarboardDB
 import discord
 import pytz
 import asyncio

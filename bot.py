@@ -7,7 +7,9 @@ from utilities import Config
 from discord.ext import commands
 from discord.utils import get
 from utilities import get_env
-from utilities.database import StarboardSettings, RoleMemory, Role, Birthday
+from models.starboard import StarboardSettings
+from models.rolememory import RoleMemory, Role
+from models.birthday import Birthday
 from utilities.logging import logger
 from utilities import logging
 

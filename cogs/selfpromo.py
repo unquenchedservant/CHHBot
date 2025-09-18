@@ -5,7 +5,7 @@ import discord
 from utilities import Config
 from discord.commands import Option, message_command, slash_command
 from discord.ext import commands
-from utilities.database import SelfPromoMsg
+from models.selfpromo import SelfPromoMsg
 from utilities.logging import logger
 
 class SelfPromo(commands.Cog):

@@ -4,7 +4,7 @@ from discord.commands import Option
 from discord import option
 from discord.ext import commands
 from discord import SlashCommandGroup
-from utilities.database import Birthday
+from models.birthday import Birthday
 from utilities.logging import logger
 
 class Birthdays(commands.Cog):
