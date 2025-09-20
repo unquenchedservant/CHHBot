@@ -1,6 +1,6 @@
-from models import Database
+from db import Database
 
-class RoleMemory(Database):
+class RoleMemoryDB(Database):
     def __init__(self):
         super().__init__()
         self.create()
@@ -39,7 +39,7 @@ class RoleMemory(Database):
             else:
                 return False
             
-class Role(Database):
+class RoleDB(Database):
     def __init__(self):
         super().__init__()
         self.create()

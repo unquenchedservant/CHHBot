@@ -1,6 +1,6 @@
-from models import Database
+from db import Database
 
-class SelfPromoMsg(Database):
+class SelfPromoMsgDB(Database):
     def __init__(self):
         super().__init__()
         self.create()

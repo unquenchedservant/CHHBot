@@ -1,9 +1,9 @@
 from discord.ext import commands
 from utilities import Config
 from utilities.logging import logger
-from models.starboard import StarboardSettings
-from models.starboard import Modboard
-from models.starboard import StarboardDB
+from db.starboard import StarboardSettingsDB
+from db.starboard import ModboardDB
+from db.starboard import StarboardDB
 import discord
 import pytz
 import asyncio
@@ -22,8 +22,8 @@ class Starboard(commands.Cog):
         self.config = Config()
         self.lock = asyncio.Lock()
         self.starboard_db = StarboardDB()
-        self.modboard = Modboard()
-        self.starboard_settings = StarboardSettings()
+        self.modboard = ModboardDB()
+        self.starboard_settings = StarboardSettingsDB()
 
     async def add_to_starboard(self, msg, true_count, starboard_channel):
         embed = self.create_embed(msg, true_count)

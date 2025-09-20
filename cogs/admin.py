@@ -7,11 +7,11 @@ from discord.commands import Option, slash_command
 from discord.ext import commands
 from discord import SlashCommandGroup
 from datetime import datetime
-from models.rolememory import RoleMemory
-from models.holiday import Holiday
-from models.birthday import Birthday
-from models.starboard import StarboardSettings
-from models.archival import Archival
+from db.rolememory import RoleMemoryDB
+from db.holiday import HolidayDB
+from db.birthday import BirthdayDB
+from db.starboard import StarboardSettingsDB
+from db.archival import ArchivalDB
 from utilities.logging import logger
 from utilities import check_month
 ERROR_MSG = "You need to be a mod or admin to use this command"
@@ -44,12 +44,12 @@ class Admin(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.starboard_settings = StarboardSettings()
-        self.holiday = Holiday()
-        self.rolememory = RoleMemory()
-        self.archival = Archival()
+        self.starboard_settings = StarboardSettingsDB()
+        self.holiday = HolidayDB()
+        self.rolememory = RoleMemoryDB()
+        self.archival = ArchivalDB()
         self.config = Config()
-        self.birthday = Birthday()
+        self.birthday = BirthdayDB()
 
     async def handle_existing_archive(self, channel, level, data):
         if data[0][3] == 2 and level == 1:

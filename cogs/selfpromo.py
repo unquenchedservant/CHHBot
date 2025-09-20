@@ -5,14 +5,14 @@ import discord
 from utilities import Config
 from discord.commands import Option, message_command, slash_command
 from discord.ext import commands
-from models.selfpromo import SelfPromoMsg
+from db.selfpromo import SelfPromoMsgDB
 from utilities.logging import logger
 
 class SelfPromo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config()
-        self.selfpromomsg = SelfPromoMsg()
+        self.selfpromomsg_db = SelfPromoMsgDB()
 
     async def check_validity(self, ctx: discord.ApplicationContext, user:discord.Member, type: str):
         logger.info("Self-Promo report ({}) - Reporter: {} | Reportee: {}".format(type, ctx.author.name, user.name))
@@ -60,7 +60,7 @@ class SelfPromo(commands.Cog):
     @message_command(name="Mark Self-Promo")
     async def selfpromo(self, ctx, message: discord.Message):
         user = message.author
-        if self.selfpromomsg.check(message.id):
+        if self.selfpromomsg_db.check(message.id):
             await ctx.respond(
                 "This message has already been reported, thank you!", ephemeral=True
             )
@@ -86,7 +86,7 @@ class SelfPromo(commands.Cog):
                 "Thanks, we let the user know about our self promotion rule!",
                 ephemeral=True,
             )
-            self.selfpromomsg.add(message.id)
+            self.selfpromomsg_db.add(message.id)
             report_channel = self.bot.get_channel(self.config.get_report_id())
             report_msg = "The following message was tagged for self-promotion by <@{}>:\n{}\n".format(ctx.author.id, message.jump_url)
             

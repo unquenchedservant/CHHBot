@@ -1,4 +1,4 @@
-from models import Database
+from db import Database
 
 class StarboardDB(Database):
     def __init__(self):
@@ -30,7 +30,7 @@ class StarboardDB(Database):
     def drop(self):
         self.execute("DROP TABLE starboard")
 
-class Modboard(Database):
+class ModboardDB(Database):
     def __init__(self):
         super().__init__()
         self.create()
@@ -60,7 +60,7 @@ class Modboard(Database):
     def drop(self):
         self.execute("DROP TABLE modboard")
 
-class StarboardSettings(Database):
+class StarboardSettingsDB(Database):
     def __init__(self):
         super().__init__()
         self.create()

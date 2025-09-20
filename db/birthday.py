@@ -1,6 +1,6 @@
-from models import Database
+from db import Database
 
-class Birthday(Database):
+class BirthdayDB(Database):
     def __init__(self):
         super().__init__()
         self.create()
