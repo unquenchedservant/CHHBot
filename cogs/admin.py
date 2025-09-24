@@ -44,19 +44,19 @@ class Admin(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.starboard_settings = StarboardSettingsDB()
-        self.holiday = HolidayDB()
-        self.rolememory = RoleMemoryDB()
-        self.archival = ArchivalDB()
+        self.starboard_settings_db = StarboardSettingsDB()
+        self.holiday_db = HolidayDB()
+        self.rolememory_db = RoleMemoryDB()
+        self.archival_db = ArchivalDB()
         self.config = Config()
-        self.birthday = BirthdayDB()
+        self.birthday_db = BirthdayDB()
 
     async def handle_existing_archive(self, channel, level, data):
         if data[0][3] == 2 and level == 1:
             current_month = check_month(datetime.now().month + 6)
-            self.archival.update(channel.id, level=level, month=current_month)
+            self.archival_db.update(channel.id, level=level, month=current_month)
         else:
-            self.archival.update(channel.id, level=level)
+            self.archival_db.update(channel.id, level=level)
         return None
     
     async def handle_new_archive(self, channel, level):
@@ -64,7 +64,7 @@ class Admin(commands.Cog):
         current_day = datetime.now().day
         if level == 2:
             current_month = check_month(current_month - 3)
-        self.archival.set(channel.id, current_month, current_day, level)
+        self.archival_db.set(channel.id, current_month, current_day, level)
 
     async def channel_move(self, channel: discord.channel, level, guild: discord.guild):
         if level == 1:
@@ -87,7 +87,7 @@ class Admin(commands.Cog):
     async def archive_remove(self, ctx:discord.ApplicationContext, channel: Option(discord.TextChannel, "Channel to be unarchived", required=True, default=None)):
         if not await self.has_permission(ctx):
             return
-        self.archival.remove(channel.id)
+        self.archival_db.remove(channel.id)
         await ctx.respond("Successfully removed {} from the DB, please move it manually and sync permissions if applicable".format(channel.name), ephemeral=True)
 
     @slash_command(
@@ -98,7 +98,7 @@ class Admin(commands.Cog):
         if not await self.has_permission(ctx):
             return
     
-        data = self.archival.check(channel.id)
+        data = self.archival_db.check(channel.id)
         if len(data) > 0:
             if data[0][3] == level:
                 await ctx.respond("That channel has already been set to be archived at that level", ephemeral=True)
@@ -131,7 +131,7 @@ class Admin(commands.Cog):
     async def checkbirthday(self, ctx: discord.ApplicationContext, user: Option(discord.User, "User to check birthday", required=True, default=None)):
         if not await self.has_permission(ctx):
             return
-        birthday = self.birthday.get(user.id)
+        birthday = self.birthday_db.get(user.id)
         if birthday == [0, 0]:
             await ctx.respond("User does not have a birthday set, use `/setbirthday` to do so", ephemeral=True)
         else:
@@ -149,7 +149,7 @@ class Admin(commands.Cog):
         logger.info("starboard - threshold - User: {}".format(ctx.author.name))
         if not await self.has_permission(ctx):
             return
-        self.starboard_settings.update_threshold(ctx.guild.id, threshold)
+        self.starboard_settings_db.update_threshold(ctx.guild.id, threshold)
         await ctx.respond("Starboard threshold set to {}".format(threshold), ephemeral=True)
 
     @starboardgrp.command( name="channel", default_permission=False, description="Set the channel for the starboard")
@@ -157,7 +157,7 @@ class Admin(commands.Cog):
         logger.info("starboard - setchannel - User: {}".format(ctx.author.name))
         if not await self.has_permission(ctx):
             return
-        self.starboard_settings.update_channel(ctx.guild.id, channel.id)
+        self.starboard_settings_db.update_channel(ctx.guild.id, channel.id)
         await ctx.respond("Starboard channel set to {}".format(channel.name), ephemeral=True)
         
 
@@ -205,7 +205,7 @@ class Admin(commands.Cog):
         elif not msg:
             await ctx.respond("Please enter a holiday message", ephemeral=True)
         else:
-            updated = self.holiday.add(month, day, msg)
+            updated = self.holiday_db.add(month, day, msg)
             month = utilities.zero_leading(month)
             day = utilities.zero_leading(day)
             if updated:
@@ -249,7 +249,7 @@ class Admin(commands.Cog):
             logger.info("checkholidays - User: {}".format(ctx.author.name))
             if ctx.author.guild_permissions.kick_members:
                 msg = ""
-                holidays = self.holiday.check_multi()
+                holidays = self.holiday_db.check_multi()
                 if len(holidays) == 0:
                     msg = "No holidays set"
                 else:
@@ -268,7 +268,7 @@ class Admin(commands.Cog):
         elif not day:
             await ctx.respond("Please enter the holiday day (1-31)", ephemeral=True)
         else:
-            msg = self.holiday.check(month, day)
+            msg = self.holiday_db.check(month, day)
             if msg == 0:
                 await ctx.respond("There is no holiday on that day", ephemeral=True)
             else:
@@ -278,7 +278,7 @@ class Admin(commands.Cog):
                     "The message for {}/{} is : {}".format(month, day, msg),
                     ephemeral=True,
                 )
-        msg = self.holiday.checkHoliday(month, day)
+        msg = self.holiday_db.checkHoliday(month, day)
 
     @holidaygrp.command(
         
@@ -313,7 +313,7 @@ class Admin(commands.Cog):
         elif not day:
             await ctx.respond("Please enter the holiday day (1-31)", ephemeral=True)
         else:
-            status = self.holiday.remove(month, day)
+            status = self.holiday_db.remove(month, day)
             if status == 1:
                 month = utilities.zero_leading(month)
                 day = utilities.zero_leading(day)
@@ -336,13 +336,13 @@ class Admin(commands.Cog):
         logger.info("togglerolememory - User: {}".format(ctx.author.name))
         if not await self.has_permission(ctx):
             return
-        status = self.rolememory.check(ctx.guild.id)
+        status = self.rolememory_db.check(ctx.guild.id)
         msg = ""
         if status == 1:
             msg = "Role memory has been turned off for this server"
         if status == 0:
             msg = "Role memory has been turned on for this server"
-        self.rolememory.toggle(ctx.guild.id)
+        self.rolememory_db.toggle(ctx.guild.id)
         await ctx.respond(msg, ephemeral=True)
 
     @rolememgrp.command( default_permission=False)
@@ -350,7 +350,7 @@ class Admin(commands.Cog):
         logger.info("checkrolememory - User: {}".format(ctx.author.name))
         if not await self.has_permission(ctx):
             return
-        status = self.rolememory.check(ctx.guild.id)
+        status = self.rolememory_db.check(ctx.guild.id)
         msg = ""
         if status == 1:
             msg = "Role memory is turned on on this server"
