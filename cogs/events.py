@@ -4,7 +4,9 @@ from utilities import Config
 from datetime import time, timezone, datetime, date
 from discord.ext import tasks
 import random
-from utilities.database import Birthday, Holiday, Archival
+from db.birthday import BirthdayDB
+from db.holiday import HolidayDB
+from db.archival import ArchivalDB
 from utilities.logging import logger
 import discord
 from datetime import datetime, timedelta
@@ -15,9 +17,9 @@ class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config()
-        self.birthday = Birthday()
-        self.holiday = Holiday()
-        self.archive_db = Archival()
+        self.birthday_db = BirthdayDB()
+        self.holiday_db = HolidayDB()
+        self.archive_db = ArchivalDB()
 
         self.daily_birthday_task.start()
         self.daily_holiday_task.start()
@@ -96,7 +98,7 @@ class Events(commands.Cog):
         """
         current_month = datetime.now().month
         current_day = datetime.now().day
-        birthday_ids = self.birthday.check(current_month, current_day)
+        birthday_ids = self.birthday_db.check(current_month, current_day)
         logger.info("birthday check 2: {}".format(birthday_ids))
         if not len(birthday_ids) == 0:
             msg = "We've got a birthday! Make sure to wish the following people a happy birthday:\n"
@@ -133,7 +135,7 @@ class Events(commands.Cog):
         """
         current_month = datetime.now().month
         current_day = datetime.now().day
-        holiday_message = self.holiday.check(current_month, current_day)
+        holiday_message = self.holiday_db.check(current_month, current_day)
         if holiday_message and not (current_month == 1 and current_day == 16):
             channel = self.bot.get_channel(self.config.get_announcements_channel_id())
             await channel.send(holiday_message)
@@ -169,7 +171,7 @@ class Events(commands.Cog):
         current_day = datetime.now().day
         if current_month == 1 and current_day == 16:
             channel = self.bot.get_channel(self.config.get_announcements_channel_id())
-            msg = self.holiday.check(1,16)
+            msg = self.holiday_db.check(1,16)
             if not msg:
                 msg = "LET ME HEAR YOU SHOUT 1 1 6!\n\n Happy 116 day, everyone!"
             await channel.send(msg)
@@ -243,7 +245,10 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         ref_msg = ""
-        channel_name = message.channel.name
+        if not isinstance(message.channel, discord.DMChannel):
+            channel_name = message.channel.name
+        else:
+            channel_name = "Direct Message"
         if message.reference is not None:
             calling_channel = self.bot.get_channel(message.channel.id)
             ref_msg_temp = await calling_channel.fetch_message(message.reference.message_id)

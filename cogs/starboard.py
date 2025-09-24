@@ -1,7 +1,9 @@
 from discord.ext import commands
 from utilities import Config
 from utilities.logging import logger
-from utilities.database import StarboardDB, Modboard, StarboardSettings
+from db.starboard import StarboardSettingsDB
+from db.starboard import ModboardDB
+from db.starboard import StarboardDB
 import discord
 import pytz
 import asyncio
@@ -20,8 +22,8 @@ class Starboard(commands.Cog):
         self.config = Config()
         self.lock = asyncio.Lock()
         self.starboard_db = StarboardDB()
-        self.modboard = Modboard()
-        self.starboard_settings = StarboardSettings()
+        self.modboard_db = ModboardDB()
+        self.starboard_settings_db = StarboardSettingsDB()
 
     async def add_to_starboard(self, msg, true_count, starboard_channel):
         embed = self.create_embed(msg, true_count)
@@ -41,23 +43,23 @@ class Starboard(commands.Cog):
     async def handle_modboard(self, msg, mod_count, payload):
         modboard_channel_id = self.config.get_modboard_channel()
         modboard = self.bot.get_channel(modboard_channel_id)
-        on_modboard = self.modboard.check(payload.message_id)
+        on_modboard = self.modboard_db.check(payload.message_id)
         true_count = await self.get_true_count(msg)
         if on_modboard:
-            modboard_msg_id = self.modboard.get(payload.message_id)
+            modboard_msg_id = self.modboard_db.get(payload.message_id)
             modboard_msg = await modboard.fetch_message(modboard_msg_id)
 
-        if len(mod_count) > 0 and true_count < self.starboard_settings.get_threshold(payload.guild_id):
+        if len(mod_count) > 0 and true_count < self.starboard_settings_db.get_threshold(payload.guild_id):
             if not on_modboard:
                 modboard_embed = self.create_mod_embed(msg, len(mod_count))
                 modboard_msg = await modboard.send(embed=modboard_embed)
-                self.modboard.add(payload.message_id, modboard_msg.id)
+                self.modboard_db.add(payload.message_id, modboard_msg.id)
             else:
                 modboard_embed = self.create_mod_embed(msg, len(mod_count))
                 await modboard_msg.edit(embed=modboard_embed)
         elif on_modboard:
             await modboard_msg.delete()
-            self.modboard.remove(payload.message_id)
+            self.modboard_db.remove(payload.message_id)
 
     async def get_mod_count(self, msg):
         payload = []
@@ -93,7 +95,7 @@ class Starboard(commands.Cog):
 
                 await self.handle_modboard(msg, mod_count, payload)
                 
-                if true_count >= self.starboard_settings.get_threshold(self.config.get_guild_id()):
+                if true_count >= self.starboard_settings_db.get_threshold(self.config.get_guild_id()):
                     starboard_channel = self.bot.get_channel(self.config.get_starboard_channel())
                     if not self.starboard_db.check(payload.message_id):
                         await self.add_to_starboard(msg, true_count, starboard_channel)
@@ -113,7 +115,7 @@ class Starboard(commands.Cog):
                 
                 starboard_channel = self.bot.get_channel(self.config.get_starboard_channel())
                 
-                if true_count < self.starboard_settings.get_threshold(self.config.get_guild_id()):
+                if true_count < self.starboard_settings_db.get_threshold(self.config.get_guild_id()):
                     if self.starboard_db.check(payload.message_id):
                         await self.remove_from_starboard(msg, starboard_channel)
                 else:

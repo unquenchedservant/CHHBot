@@ -7,7 +7,9 @@ from utilities import Config
 from discord.ext import commands
 from discord.utils import get
 from utilities import get_env
-from utilities.database import StarboardSettings, RoleMemory, Role, Birthday
+from db.starboard import StarboardSettingsDB
+from db.rolememory import RoleMemoryDB, RoleDB
+from db.birthday import BirthdayDB
 from utilities.logging import logger
 from utilities import logging
 
@@ -17,10 +19,10 @@ intents.members = True
 intents.reactions = True
 intents.messages = True
 
-starboard_settings = StarboardSettings()
-role_memory = RoleMemory()
-role_db = Role()
-birthday = Birthday()
+starboard_settings = StarboardSettingsDB()
+role_memory_db = RoleMemoryDB()
+role_db = RoleDB()
+birthday_db = BirthdayDB()
 token = get_env.discord_token()
 if token.endswith("B2M"):
     bot = discord.Bot(
@@ -46,9 +48,9 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    if role_memory.get(member.guild.id):
+    if role_memory_db.get(member.guild.id):
         rolesToAdd = role.get(member.id)
-        birthday.set_active(True, member.id)
+        birthday_db.set_active(True, member.id)
         for roleID in rolesToAdd:
             role = get(member.guild.roles, id=roleID)
             await member.add_roles(role, atomic=True)
@@ -56,8 +58,8 @@ async def on_member_join(member):
 
 @bot.event
 async def on_member_remove(member):
-    birthday.set_active(False, member.id)
-    if role_memory.get(member.guild.id):
+    birthday_db.set_active(False, member.id)
+    if role_memory_db.get(member.guild.id):
         for role in member.roles:
             if not role.name == "@everyone":
                 role_db.add(member.id, role.id)
