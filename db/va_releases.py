@@ -27,16 +27,18 @@ class VAReleasesDB(Database):
     
     def get_user_by_id(self, ID):
         data = self.execute(f"SELECT UserID FROM vareleases WHERE ID={ID}")
-        print(data)
         return(data)
+    
     def get_by_id(self, ID):
         data = self.execute(f"SELECT * FROM vareleases WHERE ID={ID}")
-        print(data)
         return data
     
     def get_by_user(self, userID):
         data = self.execute(f"SELECT * FROM vareleases WHERE UserID={userID}")
-        print(data)
+        return data
+    
+    def get_by_date(self, date):
+        data  = self.execute(f"SELECT * FROM vareleases WHERE ReleaseDate={date}")
         return data
     
     def check(self, ID):
