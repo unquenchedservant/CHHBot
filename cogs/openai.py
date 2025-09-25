@@ -2,26 +2,18 @@ from discord.ext import commands
 import discord
 from discord.commands import Option, slash_command, message_command
 from utilities import openai
+import utilities
 from utilities.logging import logger
 
 class OpenAI(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    def get_name(self, user):
-        if not user.global_name == None:
-            uname = user.global_name
-        elif not user.nick == None:
-            uname = user.nick
-        else:
-            uname = user.name
-        return uname
     
     @message_command(name="Roast This Message")
     async def roast(self, ctx, message: discord.Message):
         await ctx.defer()
-        uname = self.get_name(message.author)
-        req_uname = self.get_name(ctx.user)
+        uname = utilities.get_username(message.author)
+        req_uname = utilities.get_username(ctx.user)
         channel_name = ctx.channel.name
         async with ctx.channel.typing():
             response = await openai.generate_roast(message.content, uname)
@@ -38,7 +30,7 @@ class OpenAI(commands.Cog):
     )
     async def ask(self, ctx: discord.ApplicationContext, prompt: Option(str, 'Prompt for CHHBot', required=True), hide: Option(bool, "Do you want this to show only for you?", required=False, default=False)):
         await ctx.defer(ephemeral=hide)
-        uname = self.get_name(ctx.user)
+        uname = utilities.get_username(ctx.user)
         self.bot
         channel_name = ctx.channel.name
         if not hide:

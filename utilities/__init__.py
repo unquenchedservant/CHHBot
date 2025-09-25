@@ -5,6 +5,15 @@ def is_after(target_str):
     target = datetime.strptime(target_str, "%d.%m.%Y %H:%M:%S")
     if now > target.timestamp():
         return True
+    
+def get_username(user):
+    if not user.global_name == None:
+            uname = user.global_name
+    elif not user.nick == None:
+            uname = user.nick
+    else:
+            uname = user.name
+    return uname
       
 def check_month(month):
     if month > 0:
