@@ -37,7 +37,8 @@ extensions = [
     "cogs.events",
     "cogs.selfpromo",
     "cogs.starboard",
-    "cogs.openai"
+    "cogs.openai",
+    "cogs.vareleases"
 ]
 
 @bot.event
