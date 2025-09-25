@@ -38,7 +38,7 @@ class VAReleasesDB(Database):
         return data
     
     def get_by_date(self, date):
-        data  = self.execute(f"SELECT * FROM vareleases WHERE ReleaseDate={date}")
+        data  = self.execute(f"SELECT * FROM vareleases WHERE ReleaseDate='{date}'")
         return data
     
     def check(self, ID):
