@@ -38,6 +38,9 @@ class VAReleases(commands.Cog):
                   desc: Option(str, description="Gives us a short description(<300 characters) of the release. Default: Blank", default="", required=False), #type:ignore
                   link: Option(str, description="Provide a distro link to the release (song.link, etc), default: None", default="None", required=False)): #type:ignore
         userID = ctx.author.id
+        if not self.check_verified(ctx.author):
+            await ctx.respond("You are not a verified artist!", ephemeral=True)
+            return
         userName = utilities.get_username(ctx.author)
         logger.info(f"{userName} added a new {type} release, releasing: {release_date}")
         id = self.va_releases_db.add(userID, userName, title, release_date, desc, type, link)
@@ -56,6 +59,9 @@ class VAReleases(commands.Cog):
                      link: Option(str, description="Update the link, default: None", default="", required=False)): #type:ignore
         if type == "-":
             type = ""
+        if not self.check_verified(ctx.author):
+            await ctx.respond("You are not a verified artist!", ephemeral=True)
+            return
         if self.va_releases_db.check(id) ==  0:
             logger.info(f"{utilities.get_username(ctx.author)} tried to update a release that didn't exist")
             await ctx.respond("That release does not exist", ephemeral=True)
