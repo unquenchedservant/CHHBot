@@ -49,7 +49,7 @@ class VAReleases(commands.Cog):
             return
         self.va_releases_db.update(id, title, release_date, desc, type, link)
         logger.info(f"{utilities.get_username(ctx.author)} successfully updated release ID #{id}")
-        await ctx.respond(f"Successfully updated release ID #{id}. Use `/releases check` to verify", ephemeral=True)
+        await ctx.respond(f"Successfully updated release ID #{id}. Use `/release check` to verify", ephemeral=True)
 
     @vareleasesgrp.command(description="Remove a release by ID")
     async def remove(self, ctx: discord.ApplicationContext, 
@@ -81,7 +81,7 @@ class VAReleases(commands.Cog):
         else:
             for release in releases:
                 release_id, _, _, title, date, desc, type_, link = release
-                link_text = f"[Click here]({link})" if link != "None" else "No link"
+                link_text = f"[Link]({link})" if link != "None" else "None"
                 
                 field_value = f"**Release Date:** {date}\n**Type:** {type_}\n**Description:** {desc}\n**Link:** {link_text}"
                 embed.add_field(name=f"ID #{release_id} - {title}", value=field_value, inline=False)
