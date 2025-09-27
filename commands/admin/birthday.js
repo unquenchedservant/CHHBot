@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js')
 const { BirthdayDB } = require('../../db/birthday')
+const logger = require('../../utilities/logger');
 
 const birthday_db = new BirthdayDB();
 
@@ -17,7 +18,7 @@ const data = new SlashCommandBuilder()
 module.exports = {
     data, 
     async execute(interaction){
-        logger.info(`'/checkbirthday' was called by ${interaction.user.name}`)
+        logger.info(`'/checkbirthday' was called by ${interaction.user.tag}`)
         let birthday = birthday_db.get(interaction.options.getUser('user').id)
         if (birthday == [0,0]){
             await interaction.reply({ content: "User does not have a birthday set", flags: MessageFlags.Ephemeral})

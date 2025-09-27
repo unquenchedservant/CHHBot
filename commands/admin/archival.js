@@ -71,7 +71,7 @@ module.exports = {
     data,
     async execute(interaction) {
         if (interaction.options.getSubcommand() === "add"){
-            logger.info(`'/archive add' was called by ${interaction.user.name}`)
+            logger.info(`'/archive add' was called by ${interaction.user.tag}`)
             const check = archival_db.check(interaction.options.getChannel('channel').id)
             if (check.length > 0){
                 if (check[0][3] === interaction.options.getInteger("level")){
@@ -90,7 +90,7 @@ module.exports = {
                 logger.info(`'/archive add' was successful. Added ${interaction.options.getChannel('channel').name} to the archive`)
             }
         }else if(interaction.options.getSubcommand() === "remove"){
-            logger.info(`'/archive remove' was called by ${interaction.user.name}`)
+            logger.info(`'/archive remove' was called by ${interaction.user.tag}`)
             const check = archival_db.check(interaction.options.getChannel('channel').id)
             if (check.length > 0){
                 await archival_db.remove(interaction.options.getChannel('channel').id)
