@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, channelMention, PermissionFlagsBits, MessageFlags } = require('discord.js');
 const HolidayDB = require('../../db/holiday');
+const logger = require('../../utilities/logger');
 
 const holiday_db = new HolidayDB();
 
@@ -127,15 +128,15 @@ module.exports = {
     data,
     async execute(interaction){
         if(interaction.options.getSubcommand() === "add"){
-            logger.info(`'/holiday add' was called by ${interaction.user.name}`)
+            logger.info(`'/holiday add' was called by ${interaction.user.tag}`)
             const response = await add_holiday(interaction.options.getInteger("month"), interaction.options.getInteger("day"), interaction.options.getString("message"))
             await interaction.reply({ content: response, flags: MessageFlags.Ephemeral })
         }else if(interaction.options.getSubcommand() === "remove"){
-            logger.info(`'/holiday remove' was called by ${interaction.user.name}`)
+            logger.info(`'/holiday remove' was called by ${interaction.user.tag}`)
             const response = await remove_holiday(interaction.options.getInteger("month"), interaction.options.getInteger("day"))
             await interaction.reply({ content: response, flags: MessageFlags.Ephemeral })
         }else if(interaction.options.getSubcommand() === "check"){
-            logger.info(`'/holiday check' was called by ${interaction.user.name}`)
+            logger.info(`'/holiday check' was called by ${interaction.user.tag}`)
             await check_holiday(interaction)
         }
     }
