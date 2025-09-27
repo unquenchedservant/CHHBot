@@ -25,3 +25,4 @@ chh.db-journal
 cogs/openai.py
 
 node_modules/
+startup.sh
