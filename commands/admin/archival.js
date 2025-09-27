@@ -1,7 +1,8 @@
-const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js')
+const { SlashCommandBuilder, PermissionFlagsBits, userMention, MessageFlags } = require('discord.js')
 const { ArchivalDB } = require('../../db/archival')
 const { checkMonth } = require('../../utility/dateutils');
 const archival_db = new ArchivalDB();
+const logger = require('../../utilities/logger');
 
 const data = new SlashCommandBuilder()
      .setName('archive')
@@ -70,23 +71,35 @@ module.exports = {
     data,
     async execute(interaction) {
         if (interaction.options.getSubcommand() === "add"){
+            logger.info(`'/archive add' was called by ${interaction.user.name}`)
             const check = archival_db.check(interaction.options.getChannel('channel').id)
             if (check.length > 0){
                 if (check[0][3] === interaction.options.getInteger("level")){
+                    logger.info(`'/archive add' was unsuccessfuly`)
                     await interaction.reply({content: "That channel has already been set to be archived at that level.", flags: MessageFlags.Ephemeral})
                 }else{
                     await handle_existing_archive(interaction.options.getChannel('channel').id, interaction.options.getInteger('level'), check)
                     await channel_move(interaction.options.getChannel('channel'), interaction.options.getInteger('level'), interaction.guild)
                     await interaction.reply({content: `Successfully updated archive level of ${interaction.options.getChannel('channel').name} to ${interaction.options.getInteger('level')}`})
+                    logger.info(`'/archive add' was successful. Archive update for ${interaction.options.getChannel('channel').name}`)
                 }
             }else{
                 await handle_new_archive(interaction.options.getChannel('channel').id, interaction.options.getInteger('level'))
                 await channel_move(interaction.options.getChannel('channel'), interaction.options.getInteger('level'), interaction.guild)
                 await interaction.reply({ content: `Successfully archived ${interaction.options.getChannel('channel').name} to ${interaction.options.getInteger('level')}`, flags: MessageFlags.Ephemeral })
+                logger.info(`'/archive add' was successful. Added ${interaction.options.getChannel('channel').name} to the archive`)
             }
         }else if(interaction.options.getSubcommand() === "remove"){
-            await archival_db.remove(interaction.options.getChannel('channel').id)
-            await interaction.reply({ content: `Successfully removed ${interaction.options.getChannel('channel').name} from the DB, please move it manually and sync permissions if applicable`})
+            logger.info(`'/archive remove' was called by ${interaction.user.name}`)
+            const check = archival_db.check(interaction.options.getChannel('channel').id)
+            if (check.length > 0){
+                await archival_db.remove(interaction.options.getChannel('channel').id)
+                await interaction.reply({ content: `Successfully removed ${interaction.options.getChannel('channel').name} from the DB, please move it manually and sync permissions if applicable`})
+                logger.info(`'/archive remove' was successful. ${interaction.options.getChannel('channel').name} has been removed from the archives. Ensure it was moved properly.`)
+            }else{
+                await interaction.reply({ content: "That channel is not set to be archived.", flags: MessageFlags.Ephemeral})
+                logger.info(`'/archive remove' was unsuccessful. ${interaction.options.getChannel('channel').name} is not set to be archived.`)
+            }
         }
     }
 }
