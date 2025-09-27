@@ -1,4 +1,7 @@
 const { SlashCommandBuilder, channelMention, PermissionFlagsBits } = require('discord.js');
+const { StarboardSettingsDB } = require('../../db/starboard');
+
+const starboardsettings_db = new StarboardSettingsDB();
 
 const data = new SlashCommandBuilder()
      .setName('starboard')
@@ -15,16 +18,10 @@ const data = new SlashCommandBuilder()
                     .setRequired(true)
                 )
      )
-    .addSubcommand(subcommand =>
+     .addSubcommand(subcommand =>
         subcommand
-             .setName("setchannel")
-             .setDescription("Set the channel for starboard")
-             .addChannelOption(option => 
-                option
-                    .setName("channel")
-                    .setDescription("The channel you want starboard to be")
-                    .setRequired(true)
-                )
+             .setName("getthreshold")
+             .setDescription("get the threshold for starboard")
      );
 
 module.exports = {
@@ -32,12 +29,22 @@ module.exports = {
     async execute(interaction) {
         if (interaction.options.getSubcommand() === 'setthreshold'){
             const threshold = interaction.options.getInteger('threshold');
-            //update DB here
+            if (!await starboardsettings_db.check(guildId)){
+                await starboardsettings_db.add(interaction.guildId, 0, threshold);
+            }else{
+                await starboardsettings_db.updateThreshold(interaction.guildId, threshold);
+            }
             await interaction.reply(`Starboard threshold set to ${threshold}`);
-        }else if(interaction.options.getSubcommand() === 'setchannel'){
-            const channel = interaction.options.getChannel("channel");
-            //update DB here
-            await interaction.reply(`Starboard channel set to ${channelMention(channel.id)}`)
+        }else if(interaction.options.getSubcommand() === 'getthreshold'){
+            var threshold = 0
+            if (!await starboardsettings_db.check(interaction.guildId)){
+                await starboardsettings_db.add(interaction.guildId, 0, 5)
+                threshold = 5;
+            }else{
+                threshold = await starboardsettings_db.getThreshold(interaction.guildId)
+            }
+            
+            await interaction.reply(`Current Starboard threshold is ${threshold}`)
         }
     }
 };
