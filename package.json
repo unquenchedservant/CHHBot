@@ -1,0 +1,16 @@
+{
+  "name": "chhbot",
+  "version": "0.0.1",
+  "description": "A Discord bot for the CHHCord Discord server",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "discord.js": "^14.22.1",
+    "dotenv": "^17.2.2"
+  }
+}
