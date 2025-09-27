@@ -22,6 +22,7 @@ module.exports = {
     data,
     async execute(interaction){
         if (interaction.options.getSubcommand() === "toggle"){
+            logger.info(`'/rolememory toggle' was called by ${interaction.user.name}`)
             let status = await rolememory_db.check(interaction.guildId)
             let msg = status == 1
             ? "Role memory has been turned off for this server"
@@ -29,6 +30,7 @@ module.exports = {
             await rolememory_db.toggle(interaction.guildId)
             await interaction.reply({ content: msg, flags: MessageFlags.Ephemeral })
         }else if(interaction.options.getSubcommand() === "check"){
+            logger.info(`'/rolememory check' was called by ${interaction.user.name}`)
             let status = await rolememory_db.check(interaction.guildId)
             let msg = status == 1
             ? "Role memory is turned on on this server"
