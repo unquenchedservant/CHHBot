@@ -23,3 +23,5 @@ design_doc
 chh.db-journal
 
 cogs/openai.py
+
+node_modules/
