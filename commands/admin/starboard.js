@@ -1,8 +1,9 @@
-const { SlashCommandBuilder, channelMention } = require('discord.js');
+const { SlashCommandBuilder, channelMention, PermissionFlagsBits } = require('discord.js');
 
 const data = new SlashCommandBuilder()
      .setName('starboard')
      .setDescription("Starboard related settings")
+     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
      .addSubcommand(subcommand =>
         subcommand
              .setName("setthreshold")
