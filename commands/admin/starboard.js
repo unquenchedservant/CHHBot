@@ -29,6 +29,7 @@ module.exports = {
     async execute(interaction) {
         if (interaction.options.getSubcommand() === 'setthreshold'){
             const threshold = interaction.options.getInteger('threshold');
+            logger.info(`'/starboard setthreshold' was called by ${interaction.user.name}. Threshold now: ${threshold}`)
             if (!await starboardsettings_db.check(interaction.guildId)){
                 await starboardsettings_db.add(interaction.guildId, 0, threshold);
             }else{
@@ -36,6 +37,7 @@ module.exports = {
             }
             await interaction.reply({ content: `Starboard threshold set to ${threshold}`, flags: MessageFlags.Ephemeral});
         }else if(interaction.options.getSubcommand() === 'getthreshold'){
+            logger.info(`'/starboard getthreshold' was called by ${interaction.user.name}.`)
             var threshold = 0
             if (!await starboardsettings_db.check(interaction.guildId)){
                 await starboardsettings_db.add(interaction.guildId, 0, 5)
@@ -45,6 +47,7 @@ module.exports = {
             }
             
             await interaction.reply({ content:`Current Starboard threshold is ${threshold}`, flags: MessageFlags.Ephemeral})
+            logger.info(`'/starboard getthreshold' result: ${threshold}`)
         }
     }
 };

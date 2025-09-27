@@ -17,6 +17,7 @@ const data = new SlashCommandBuilder()
 module.exports = {
     data, 
     async execute(interaction){
+        logger.info(`'/checkbirthday' was called by ${interaction.user.name}`)
         let birthday = birthday_db.get(interaction.options.getUser('user').id)
         if (birthday == [0,0]){
             await interaction.reply({ content: "User does not have a birthday set", flags: MessageFlags.Ephemeral})
