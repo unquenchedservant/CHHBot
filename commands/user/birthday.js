@@ -14,6 +14,7 @@ const data = new SlashCommandBuilder()
         .addIntegerOption(option =>
             option
             .setName("month")
+            .setDescription("Month your birthday occurs")
             .setMinValue(1)
             .setMaxValue(12)
             .setRequired(true)
@@ -21,6 +22,7 @@ const data = new SlashCommandBuilder()
         .addIntegerOption(option =>
             option
             .setName("day")
+            .setDescription("Day your birthday occurs")
             .setMinValue(1)
             .setMaxValue(31)
             .setRequired(true)
