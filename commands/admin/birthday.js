@@ -19,11 +19,11 @@ module.exports = {
     data, 
     async execute(interaction){
         logger.info(`'/checkbirthday' was called by ${interaction.user.tag}`)
-        let birthday = birthday_db.get(interaction.options.getUser('user').id)
-        if (birthday == [0,0]){
+        let birthday = await birthday_db.get(interaction.options.getUser('user').id)
+        if (birthday[0] == 0){
             await interaction.reply({ content: "User does not have a birthday set", flags: MessageFlags.Ephemeral})
         }else{
-            await interaction.reply({ content: `${interaction.options.getUser('user').name} birthday is set to ${birthday[0]}/${birthday[1]}`, flags: MessageFlags.Ephemeral})
+            await interaction.reply({ content: `${interaction.options.getUser('user').tag}'s birthday is set to ${birthday.MONTH}/${birthday.DAY}`, flags: MessageFlags.Ephemeral})
         }
     }
 }
