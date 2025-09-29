@@ -41,7 +41,7 @@ class Logger {
         this._writeLog('ERROR', message)
     }
 
-    warning(message){
+    warn(message){
         this._writeLog('WARNING', message)
     }
     
