@@ -14,9 +14,9 @@ class RoleMemoryDB extends Database {
     }
 
     async check(guild_id){
-        data = await this.execute(`SELECT * FROM roleMemoryEnabled WHERE GUILDID=${guild_id}`);
+        const data = await this.execute(`SELECT * FROM roleMemoryEnabled WHERE GUILDID=${guild_id}`);
         if (!data.length == 0){
-            return data[0][1]
+            return data[0].ENABLED
         }else{
             return 0
         }
@@ -26,7 +26,8 @@ class RoleMemoryDB extends Database {
         let data = await this.execute(`SELECT * FROM roleMemoryEnabled WHERE GUILDID=${guild_id}`)
         let newEnabled = 1
         if (!data.length == 0){
-            newEnabled = data[0][1] == 0 ? 1 : 0
+            newEnabled = data[0].ENABLED == 0 ? 1 : 0
+            logger.info(`newEnabled ${guild_id}`)
             await this.execute(`UPDATE roleMemoryEnabled SET ENABLED=${newEnabled} WHERE GUILDID=${guild_id}`)
         } else {
             await this.execute(`INSERT INTO roleMemoryEnabled (GUILDID, ENABLED) VALUES (${guild_id}, ${1})`)
@@ -68,3 +69,5 @@ class RoleDB extends Database {
         await this.execute(`DELETE FROM roles WHERE UID=${user_id}`)
     }
 }
+
+module.exports = { RoleDB, RoleMemoryDB };
