@@ -45,15 +45,15 @@ module.exports = {
         if (interaction.options.getSubcommand() === 'set'){
             logger.info(`'/birthday set' called by ${interaction.user.tag}`)
             await birthday_db.set(interaction.user.id, interaction.options.getInteger('month'), interaction.options.getInteger('day'))
-            await interaction.reply({content: `Your birthday has been set to ${month}/${day} successfully`, flags: MessageFlags.Ephemeral })
-            logger.info(`${interaction.user.tag} set birthday to ${month}/${day}`)
+            await interaction.reply({content: `Your birthday has been set to ${interaction.options.getInteger("month")}/${interaction.options.getInteger("day")} successfully`, flags: MessageFlags.Ephemeral })
+            logger.info(`${interaction.user.tag} set birthday to ${interaction.options.getInteger("month")}/${interaction.options.getInteger("day")}`)
         }else if(interaction.options.getSubcommand() === 'check'){
             logger.info(`'/birthday check' called by ${interaction.user.tag}`)
-            const birthday = await birthday.db.get(interaction.user.id)
+            const birthday = await birthday_db.get(interaction.user.id)
             if (birthday == [0,0]){
                 await interaction.reply({ content: "You do not have a birthday set, use `/setbirthday` to do so", flags: MessageFlags.Ephemeral})
             }else{
-                await interaction.reply({ content: `Your birthday is set to ${birthday[0]}/${birthday[1]}`, flags: MessageFlags.Ephemeral })
+                await interaction.reply({ content: `Your birthday is set to ${birthday.MONTH}/${birthday.DAY}`, flags: MessageFlags.Ephemeral })
             }
         }else if(interaction.options.getSubcommand() === 'remove'){
             logger.info(`'/birthday remove' called by ${interaction.user.tag}`)
