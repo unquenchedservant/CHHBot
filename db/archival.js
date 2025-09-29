@@ -16,12 +16,12 @@ class ArchivalDB extends Database {
 
     async get_channels(month, day){
         let data = await this.execute(`SELECT CHANNELID FROM archival WHERE MONTH=${month} AND DAY=${day}`)
-        return ch = data.length == 0 ? false : true
+        return data.length == 0 ? false : true
     }
 
     async get_level(channel_id){
         let data = await this.execute(`SELECT LEVEL FROM archival WHERE CHANNELID=${channel_id}`)
-        return ch = data.length == 0 ? false : data
+        return data.length == 0 ? false : data
     }
 
     async check(channel_id){
