@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, userMention, MessageFlags } = require('discord.js')
+const { SlashCommandBuilder, PermissionFlagsBits,MessageFlags } = require('discord.js')
 const ArchivalDB = require('../../db/archival')
 const { checkMonth } = require('../../utility/dateutils');
 const archival_db = new ArchivalDB();
@@ -76,7 +76,7 @@ module.exports = {
             if (check.length > 0){
                 if (check[0][3] === interaction.options.getInteger("level")){
                     logger.info(`'/archive add' was unsuccessfuly`)
-                    await interaction.reply({content: "That channel has already been set to be archived at that level.", flags: MessageFlags.Ephemeral})
+                    await interaction.reply({content: "That channel has already been set to be archived at that level.", flags: MessageFlags.Ephemeral })
                 }else{
                     await handle_existing_archive(interaction.options.getChannel('channel').id, interaction.options.getInteger('level'), check)
                     await channel_move(interaction.options.getChannel('channel'), interaction.options.getInteger('level'), interaction.guild)
@@ -97,7 +97,7 @@ module.exports = {
                 await interaction.reply({ content: `Successfully removed ${interaction.options.getChannel('channel').name} from the DB, please move it manually and sync permissions if applicable`})
                 logger.info(`'/archive remove' was successful. ${interaction.options.getChannel('channel').name} has been removed from the archives. Ensure it was moved properly.`)
             }else{
-                await interaction.reply({ content: "That channel is not set to be archived.", flags: MessageFlags.Ephemeral})
+                await interaction.reply({ content: "That channel is not set to be archived.", flags: MessageFlags.Ephemeral })
                 logger.info(`'/archive remove' was unsuccessful. ${interaction.options.getChannel('channel').name} is not set to be archived.`)
             }
         }

@@ -36,7 +36,7 @@ module.exports = {
             }else{
                 await starboardsettings_db.updateThreshold(interaction.guildId, threshold);
             }
-            await interaction.reply({ content: `Starboard threshold set to ${threshold}`, flags: MessageFlags.Ephemeral});
+            await interaction.reply({ content: `Starboard threshold set to ${threshold}`, flags: MessageFlags.Ephemeral });
         }else if(interaction.options.getSubcommand() === 'getthreshold'){
             logger.info(`'/starboard getthreshold' was called by ${interaction.user.tag}.`)
             var threshold = 0
@@ -47,7 +47,7 @@ module.exports = {
                 threshold = await starboardsettings_db.getThreshold(interaction.guildId)
             }
             
-            await interaction.reply({ content:`Current Starboard threshold is ${threshold}`, flags: MessageFlags.Ephemeral})
+            await interaction.reply({ content:`Current Starboard threshold is ${threshold}`, flags: MessageFlags.Ephemeral })
             logger.info(`'/starboard getthreshold' result: ${threshold}`)
         }
     }

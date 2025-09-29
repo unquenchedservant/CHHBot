@@ -51,7 +51,7 @@ module.exports = {
             logger.info(`'/birthday check' called by ${interaction.user.tag}`)
             const birthday = await birthday_db.get(interaction.user.id)
             if (birthday == [0,0]){
-                await interaction.reply({ content: "You do not have a birthday set, use `/setbirthday` to do so", flags: MessageFlags.Ephemeral})
+                await interaction.reply({ content: "You do not have a birthday set, use `/setbirthday` to do so", flags: MessageFlags.Ephemeral })
             }else{
                 await interaction.reply({ content: `Your birthday is set to ${birthday.MONTH}/${birthday.DAY}`, flags: MessageFlags.Ephemeral })
             }
