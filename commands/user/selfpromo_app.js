@@ -1,7 +1,8 @@
-const { MessageFlags, ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder } = require("discord.js");
+const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, MessageFlags } = require("discord.js");
 const SelfPromoMsgDB = require('../../db/selfpromo');
 const logger = require('../../utility/logger');
 const config = require('../../utility/config');
+const { check_validity } = require('../../utility/utils');
 
 const selfpromomsgdb = new SelfPromoMsgDB();
 
@@ -9,34 +10,6 @@ const selfpromomsgdb = new SelfPromoMsgDB();
 const data = new ContextMenuCommandBuilder()
     .setName('Mark Self-Promo')
     .setType(ApplicationCommandType.Message);
-
-async function check_validity(interaction, user, type) {
-    const userRoles = interaction.member.roles.cache.map(role => role.name.toLowerCase());
-    if(userRoles.includes('verified artist')){
-        logger.info(`Self-Promo report (${type}) - Verified Artist | No Action`)
-        await interaction.reply({content: "Thank you for the report, but this is a verified artist",flags: MessageFlags.Ephemeral})
-        return false
-    }else if(userRoles.includes('mod')){
-        logger.info(`Self-Promo report (${type}) - Mod | No Action`);
-        await interaction.reply({content: "Thank you for the report, but this is a mod.", flags: MessageFlags.Ephemeral})
-        return false
-    }else if(userRoles.includes('admin')){
-        logger.info(`Self-Promo report (${type}) - Admin | No Action`);
-        await interaction.reply({content: "Thank you for the report, but this is an admin.", flags: MessageFlags.Ephemeral})
-        return false
-    }else if(user.bot){
-        if(user.id===701044392378499152 || user.id===436692846242955264){
-            logger.info(`Self-Promo report (${type}) - CHH Bot | Put on blast`)
-            await interaction.reply({content: "You thought."})
-        }else{
-            logger.info(`Self-Promo report (${type}) - Bot | No Action`)
-            await interaction.reply({content: "Thank you for the report, but this is a bot.", flags:MessageFlags.Ephemeral})
-        }
-        return false
-    }else{
-        return true
-    }
-}
 
 module.exports = {
     data, 
