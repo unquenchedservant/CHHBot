@@ -37,7 +37,12 @@ for (const folder of commandFolders) {
             logger.info(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
         }
     }
+    
 }
+logger.info('Deploying commands:');
+commands.forEach(cmd => {
+    logger.info(`- ${cmd.name} (${cmd.type})`);
+});
 
 const rest = new REST().setToken(token);
 
