@@ -1,13 +1,39 @@
 const dotenv = require('dotenv');
+const logger = require('./logger');
+const { MessageFlags } = require('discord.js');
 
 dotenv.config();
 
 const token = process.env.DISCORD_TOKEN;
 
-function is_dev(){
-    return token.endsWith("B2M")    
+async function check_validity(interaction, user, type) {
+    const userRoles = interaction.member.roles.cache.map(role => role.name.toLowerCase());
+    if(userRoles.includes('verified artist')){
+        logger.info(`Self-Promo report (${type}) - Verified Artist | No Action`)
+        await interaction.reply({content: "Thank you for the report, but this is a verified artist",flags: MessageFlags.Ephemeral})
+        return false
+    }else if(userRoles.includes('mod')){
+        logger.info(`Self-Promo report (${type}) - Mod | No Action`);
+        await interaction.reply({content: "Thank you for the report, but this is a mod.", flags: MessageFlags.Ephemeral})
+        return false
+    }else if(userRoles.includes('admin')){
+        logger.info(`Self-Promo report (${type}) - Admin | No Action`);
+        await interaction.reply({content: "Thank you for the report, but this is an admin.", flags: MessageFlags.Ephemeral})
+        return false
+    }else if(user.bot){
+        if(user.id===701044392378499152 || user.id===436692846242955264){
+            logger.info(`Self-Promo report (${type}) - CHH Bot | Put on blast`)
+            await interaction.reply({content: "You thought."})
+        }else{
+            logger.info(`Self-Promo report (${type}) - Bot | No Action`)
+            await interaction.reply({content: "Thank you for the report, but this is a bot.", flags:MessageFlags.Ephemeral})
+        }
+        return false
+    }else{
+        return true
+    }
 }
 
 module.exports = {
-    is_dev
+    check_validity
 }
