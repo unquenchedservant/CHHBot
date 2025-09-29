@@ -18,7 +18,7 @@ class Logger {
             }
         }
         try{
-            fs.accessSync('mnt/logs', fs.constants.W_OK)
+            fs.accessSync('/mnt/logs', fs.constants.W_OK)
         } catch (error) {
             console.error('No write permission to /mnt/logs:', error)
             process.exit(1);
