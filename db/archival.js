@@ -1,4 +1,4 @@
-const Database = require('../db/database');
+const Database = require('./database');
 
 class ArchivalDB extends Database {
     constructor() {

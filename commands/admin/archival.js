@@ -1,8 +1,8 @@
 const { SlashCommandBuilder, PermissionFlagsBits, userMention, MessageFlags } = require('discord.js')
-const { ArchivalDB } = require('../../db/archival')
+const ArchivalDB = require('../../db/archival')
 const { checkMonth } = require('../../utility/dateutils');
 const archival_db = new ArchivalDB();
-const logger = require('../../utilities/logger');
+const logger = require('../../utility/logger');
 
 const data = new SlashCommandBuilder()
      .setName('archive')

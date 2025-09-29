@@ -1,4 +1,4 @@
-i/**
+/**
  * Convert relative months to actual month numbers
  * @param {number} month - The month number to check (-8 to 18)
  * @returns {number|null} - The converted month number (1-12) or null if invalid

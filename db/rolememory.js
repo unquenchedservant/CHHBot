@@ -1,3 +1,4 @@
+const logger = require('../utility/logger');
 const Database = require('./database');
 
 class RoleMemoryDB extends Database {
