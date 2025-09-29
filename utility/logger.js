@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { is_dev } = require('./utils');
+const { is_dev } = require('./environment');
 
 class Logger {
     constructor(){
