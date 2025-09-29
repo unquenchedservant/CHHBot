@@ -23,7 +23,16 @@ for (const folder of commandFolders) {
         const filePath = path.join(commandsPath, file);
         const command = require(filePath);
         if ('data' in command && 'execute' in command) {
-            commands.push(command.data.toJSON());
+            if (command.data.toJSON){
+                 commands.push(command.data.toJSON());
+            }else if(command.data.slash){
+                 commands.push(command.data.slash);
+                if(command.data.context){
+                    commands.push(command.data.context);
+                }
+            }else{
+                commands.push(command.data)
+            }
         } else {
             logger.info(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
         }
