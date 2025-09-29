@@ -45,10 +45,12 @@ class ArchivalDB extends Database {
     }
 
     async remove(channel_id){
-        await self.execute(`DELETE FROM archival WHERE CHANNELID='${channel_id}'`)
+        await this.execute(`DELETE FROM archival WHERE CHANNELID='${channel_id}'`)
     }
     
     async drop(){
-        await self.execute("DROP TABLE archival")
+        await this.execute("DROP TABLE archival")
     }
 }
+
+module.exports = ArchivalDB;
