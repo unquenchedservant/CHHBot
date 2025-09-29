@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, channelMention, PermissionFlagsBits, MessageFlags } = require('discord.js');
 const HolidayDB = require('../../db/holiday');
-const logger = require('../../utilities/logger');
+const logger = require('../../utility/logger');
 
 const holiday_db = new HolidayDB();
 

@@ -1,6 +1,6 @@
-const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js')
-const { BirthdayDB } = require('../../db/birthday')
-const logger = require('../../utilities/logger');
+const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
+const BirthdayDB = require('../../db/birthday');
+const logger = require('../../utility/logger');
 
 const birthday_db = new BirthdayDB();
 

@@ -1,4 +1,5 @@
-const Database = require('../db/database');
+const logger = require('../utility/logger');
+const Database = require('./database');
 
 class BirthdayDB extends Database {
     constructor() {
