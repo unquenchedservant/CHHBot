@@ -28,7 +28,7 @@ class Logger {
     _writeLog(level, message){
         const timestamp = new Date().toISOString();
         const botName = is_dev ? "CHHBOT_DEV" : "CHHBOT_PROD"
-        const logEntry = `${timestamp} - ${botName} - ${level} - ${message}`
+        const logEntry = `${timestamp} - ${botName} - ${level} - ${message}\n`
         fs.appendFileSync(this.logFile, logEntry)
         console.log(logEntry);
     }
