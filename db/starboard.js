@@ -66,6 +66,85 @@ class StarboardSettingsDB extends Database {
 	}
 }
 
+class StarboardDB extends Database {
+	constructor() {
+		super();
+		this.create();
+	}
+
+	async create() {
+		await this.execute(`CREATE TABLE IF NOT EXISTS starboard
+            (MSGID INTEGER NOT NULL,
+            STARBOARDMSGID INTEGER NOT NULL)`);
+	}
+
+	async add(msg_id, starboard_msg_id) {
+		await this.execute(`INSERT INTO starboard (MSGID, STARBOARDMSGID) VALUES (${msg_id}, ${starboard_msg_id})`);
+	}
+
+	async get(msg_id) {
+		const data = await this.execute(`SELECT STARBOARDMSGID FROM starboard WHERE MSGID=${msg_id}`);
+		return data[0].STARBOARDMSGID;
+	}
+
+	async update(msg_id, starboard_msg_id) {
+		await this.execute(`UPDATE starboard SET STARBOARDMSGID=${starboard_msg_id} WHERE MSGID=${msg_id}`);
+	}
+
+	async check(msg_id) {
+		const data = await this.execute(`SELECT * FROM starboard WHERE MSGID=${msg_id}`);
+		return this.checkLen(data);
+	}
+
+	async remove(msg_id) {
+		await this.execute(`DELETE FROM starboard WHERE MSGID=${msg_id}`);
+	}
+
+	async drop() {
+		await this.execute('DROP TABLE starboard');
+	}
+}
+
+class ModboardDB extends Database {
+	constructor() {
+		super();
+		this.create();
+	}
+
+	async create() {
+		await this.execute(`CREATE TABLE IF NOT EXISTS modboard
+            (MSGID INTEGER NOT NULL,
+            MODBOARDMSGID INTEGER NOT NULL)`);
+	}
+
+	async add(msg_id, modboard_msg_id) {
+		await this.execute(`INSERT INTO modboard (MSGID, MODBOARDMSGID) VALUES (${msg_id}, ${modboard_msg_id})`);
+	}
+
+	async check(msg_id) {
+		const data = await this.execute(`SELECT * FROM modboard WHERE MSGID=${msg_id}`);
+		return this.checkLen(data);
+	}
+
+	async get(msg_id) {
+		const data = await this.execute(`SELECT MODBOARDMSGID FROM starboard WHERE MSGID=${msg_id}`);
+		return data[0].MODBOARDMSGID;
+	}
+
+	async update(msg_id, modboard_msg_id) {
+		await this.execute(`UPDATE modboard SET MODBOARDMSGID=${modboard_msg_id} WHERE MSGID=${msg_id}`);
+	}
+
+	async remove(msg_id) {
+		await this.execute(`DELETE FROM modboard WHERE MSGID=${msg_id}`);
+	}
+
+	async drop() {
+		await this.execute('DROP TABLE modboard');
+	}
+}
 module.exports = {
+	StarboardDB,
+	ModboardDB,
 	StarboardSettingsDB,
 };
