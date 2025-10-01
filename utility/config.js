@@ -1,4 +1,4 @@
-const { is_dev } = require('./utils');
+const { is_dev } = require('./environment');
 
 
 class Config {
@@ -102,6 +102,10 @@ class Config {
 	}
 
 	get_staff_id() {
+		return this.STAFF_CHANNEL_ID;
+	}
+
+	get_staff_help_id() {
 		return this.STAFF_CHANNEL_ID;
 	}
 
