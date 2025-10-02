@@ -1,5 +1,5 @@
 const Database = require('./database');
-
+const logger = require('../utility/logger');
 class StarboardSettingsDB extends Database {
 	constructor() {
 		super();
@@ -8,8 +8,8 @@ class StarboardSettingsDB extends Database {
 
 	async create() {
 		await this.execute(`CREATE TABLE IF NOT EXISTS starboardsettings
-            (GUILDID INTEGER NOT NULL,
-            STARBOARDCHANNEL INTEGER NOT NULL,
+            (GUILDID TEXT NOT NULL,
+            STARBOARDCHANNEL TEXT NOT NULL,
             STARBOARDTHRESHOLD INTEGER NOT NULL)`);
 	}
 
@@ -27,8 +27,8 @@ class StarboardSettingsDB extends Database {
 	async updateChannel(guildId, starboardChannel) {
 		console.log(`UPDATE CHANNEL ID: ${starboardChannel}`);
 		await this.execute(`UPDATE starboardsettings
-            SET STARBOARDCHANNEL=${starboardChannel}
-            WHERE GUILDID=${guildId}`);
+            SET STARBOARDCHANNEL='${starboardChannel}'
+            WHERE GUILDID='${guildId}'`);
 	}
 
 	async updateThreshold(guildId, starboardThreshold) {
@@ -64,6 +64,28 @@ class StarboardSettingsDB extends Database {
 	async drop() {
 		await this.execute('DROP TABLE starboardsettings');
 	}
+	async migrate() {
+		// Create new table with TEXT columns for IDs but keep STARBOARDTHRESHOLD as INTEGER
+		await this.execute(`CREATE TABLE IF NOT EXISTS starboardsettings_new
+            (GUILDID TEXT NOT NULL,
+            STARBOARDCHANNEL TEXT NOT NULL,
+            STARBOARDTHRESHOLD INTEGER NOT NULL)`);
+
+		// Copy data from old table, converting only IDs to strings
+		await this.execute(`INSERT INTO starboardsettings_new 
+            SELECT CAST(GUILDID as TEXT), 
+                   CAST(STARBOARDCHANNEL as TEXT),
+                   STARBOARDTHRESHOLD
+            FROM starboardsettings`);
+
+		// Drop old table
+		await this.execute('DROP TABLE starboardsettings');
+
+		// Rename new table to original name
+		await this.execute('ALTER TABLE starboardsettings_new RENAME TO starboardsettings');
+
+		logger.info('Successfully migrated starboardsettings table');
+	}
 }
 
 class StarboardDB extends Database {
@@ -74,8 +96,8 @@ class StarboardDB extends Database {
 
 	async create() {
 		await this.execute(`CREATE TABLE IF NOT EXISTS starboard
-            (MSGID INTEGER NOT NULL,
-            STARBOARDMSGID INTEGER NOT NULL)`);
+            (MSGID TEXT NOT NULL,
+            STARBOARDMSGID TEXT NOT NULL)`);
 	}
 
 	async add(msg_id, starboard_msg_id) {
@@ -84,7 +106,13 @@ class StarboardDB extends Database {
 
 	async get(msg_id) {
 		const data = await this.execute(`SELECT STARBOARDMSGID FROM starboard WHERE MSGID=${msg_id}`);
-		return data[0].STARBOARDMSGID;
+		if (data) {
+			return data[0].STARBOARDMSGID;
+		}
+		else {
+			logger.info('No data on get');
+			return 0;
+		}
 	}
 
 	async update(msg_id, starboard_msg_id) {
@@ -103,6 +131,23 @@ class StarboardDB extends Database {
 	async drop() {
 		await this.execute('DROP TABLE starboard');
 	}
+
+	async migrate() {
+		await this.execute(`CREATE TABLE IF NOT EXISTS modboard_new
+        (MSGID TEXT NOT NULL,
+        STARBOARDMSGID TEXT NOT NULL)`);
+
+		// Copy data from old table, converting IDs to strings
+		await this.execute(`INSERT INTO starboard_new 
+        SELECT CAST(MSGID as TEXT), CAST(STARBOARDMSGID as TEXT)
+        FROM modboard`);
+
+		// Drop old table
+		await this.execute('DROP TABLE starboard');
+
+		// Rename new table to original name
+		await this.execute('ALTER TABLE starboard_new RENAME TO starboard');
+	}
 }
 
 class ModboardDB extends Database {
@@ -113,11 +158,12 @@ class ModboardDB extends Database {
 
 	async create() {
 		await this.execute(`CREATE TABLE IF NOT EXISTS modboard
-            (MSGID INTEGER NOT NULL,
-            MODBOARDMSGID INTEGER NOT NULL)`);
+            (MSGID TEXT NOT NULL,
+            MODBOARDMSGID TEXT NOT NULL)`);
 	}
 
 	async add(msg_id, modboard_msg_id) {
+		logger.info(`add modboardmsgid : ${modboard_msg_id}`);
 		await this.execute(`INSERT INTO modboard (MSGID, MODBOARDMSGID) VALUES (${msg_id}, ${modboard_msg_id})`);
 	}
 
@@ -127,8 +173,12 @@ class ModboardDB extends Database {
 	}
 
 	async get(msg_id) {
-		const data = await this.execute(`SELECT MODBOARDMSGID FROM starboard WHERE MSGID=${msg_id}`);
-		return data[0].MODBOARDMSGID;
+		logger.info(`Msg id in get: ${msg_id}`);
+		const data = await this.execute(`SELECT * FROM modboard WHERE MSGID=${msg_id}`);
+		console.dir(data[0], { depth: null });
+		logger.info(`raw messageboardid : ${data[0].MODBOARDMSGID}`);
+		logger.info(`bigint: ${BigInt(data[0].MODBOARDMSGID)}`);
+		return `${BigInt(data[0].MODBOARDMSGID)}`;
 	}
 
 	async update(msg_id, modboard_msg_id) {
@@ -141,6 +191,23 @@ class ModboardDB extends Database {
 
 	async drop() {
 		await this.execute('DROP TABLE modboard');
+	}
+
+	async migrate() {
+		await this.execute(`CREATE TABLE IF NOT EXISTS modboard_new
+        (MSGID TEXT NOT NULL,
+        MODBOARDMSGID TEXT NOT NULL)`);
+
+		// Copy data from old table, converting IDs to strings
+		await this.execute(`INSERT INTO modboard_new 
+        SELECT CAST(MSGID as TEXT), CAST(MODBOARDMSGID as TEXT)
+        FROM modboard`);
+
+		// Drop old table
+		await this.execute('DROP TABLE modboard');
+
+		// Rename new table to original name
+		await this.execute('ALTER TABLE modboard_new RENAME TO modboard');
 	}
 }
 module.exports = {

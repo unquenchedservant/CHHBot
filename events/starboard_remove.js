@@ -1,6 +1,7 @@
 const { Events } = require('discord.js');
 const { StarboardSettingsDB, StarboardDB } = require('../db/starboard');
 const config = require('../utility/config');
+const logger = require('../utility/logger.js');
 
 const { getTrueCount, getModCount, handleModboard, updateStarboard, removeFromStarboard } = require('../utility/starboard.js');
 
@@ -19,13 +20,16 @@ module.exports = {
 			await handleModboard(message, modCount, payload);
 
 			const starboardChannel = await payload.client.channels.fetch(config.get_starboard_channel());
+			const threshold = await starboardSettingsDB.getThreshold(config.get_guild_id());
 
-			if (trueCount < starboardSettingsDB.getThreshold(config.get_guild_id())) {
-				if (starboardDB.check(payload.message.id)) {
+			if (trueCount < threshold) {
+				if (await starboardDB.check(payload.message.id)) {
+					logger.info('removeFromStarboard');
 					await removeFromStarboard(message, starboardChannel);
 				}
 			}
-			else {
+			else if (await starboardDB.check(payload.message.id)) {
+				logger.info('updateStarboard');
 				await updateStarboard(message, trueCount, starboardChannel);
 			}
 		}
