@@ -4,7 +4,7 @@ const path = require('node:path');
 const logger = require('./utility/logger');
 
 
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -16,6 +16,11 @@ const client = new Client({
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMessageReactions,
+	],
+	partials: [
+		Partials.Message,
+		Partials.Reaction,
 	],
 });
 
