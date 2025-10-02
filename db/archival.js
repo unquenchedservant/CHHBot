@@ -8,7 +8,7 @@ class ArchivalDB extends Database {
 
 	async create() {
 		await this.execute(`CREATE TABLE IF NOT EXISTS archival
-            (CHANNELID INTEGER NOT NULL,
+            (CHANNELID TEXT NOT NULL,
             MONTH INTEGER NOT NULL,
             DAY INTEGER NOT NULL,
             LEVEL INTEGER NOT NULL)`);
@@ -53,6 +53,30 @@ class ArchivalDB extends Database {
 
 	async drop() {
 		await this.execute('DROP TABLE archival');
+	}
+
+	async migrate() {
+		await this.execute(`CREATE TABLE IF NOT EXISTS archival_new
+            (CHANNELID TEXT NOT NULL,
+            MONTH INTEGER NOT NULL,
+            DAY INTEGER NOT NULL,
+            LEVEL INTEGER NOT NULL)`);
+
+		// Copy data from old table, converting only IDs to strings
+		await this.execute(`INSERT INTO archival_new 
+            SELECT CAST(CHANNELID as TEXT), 
+                   MONTH, 
+                   DAY, 
+                   LEVEL
+            FROM archival`);
+
+		// Drop old table
+		await this.execute('DROP TABLE archival');
+
+		// Rename new table to original name
+		await this.execute('ALTER TABLE archival_new RENAME TO archival');
+
+		logger.info('Successfully migrated archival table');
 	}
 }
 

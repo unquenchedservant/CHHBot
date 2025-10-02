@@ -26,7 +26,7 @@ class Database {
 	}
 
 	checkLen(data) {
-		return data.length !== 0;
+		return data.length > 0;
 	}
 
 	close() {
