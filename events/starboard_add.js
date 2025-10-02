@@ -19,12 +19,14 @@ module.exports = {
 
 			await handleModboard(message, modCount, payload);
 
-			if (trueCount >= starboardSettingsDB.getThreshold(config.get_guild_id())) {
+			const threshold = await starboardSettingsDB.getThreshold(config.get_guild_id());
+
+			if (trueCount >= threshold) {
 				const starboardChannel = await payload.client.channels.fetch(config.get_starboard_channel());
 				if (!starboardChannel) {
 					logger.error('Could not find starboard channel');
 				}
-				else if (!starboardDB.check(payload.message.id)) {
+				else if (!await starboardDB.check(payload.message.id)) {
 					await addToStarboard(message, trueCount, starboardChannel);
 				}
 				else {
@@ -32,7 +34,6 @@ module.exports = {
 				}
 
 			}
-			logger.info(`Fetched mesasge: ${message.id}`);
 		}
 	},
 };
