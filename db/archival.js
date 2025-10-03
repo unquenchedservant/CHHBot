@@ -1,4 +1,5 @@
 const Database = require('./database');
+const logger = require('../utility/logger');
 
 class ArchivalDB extends Database {
 	constructor() {
