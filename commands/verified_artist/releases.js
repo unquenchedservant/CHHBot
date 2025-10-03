@@ -109,9 +109,35 @@ const data = new SlashCommandBuilder()
 			),
 	);
 
+async function handleAdd(interaction) {
+	interaction.reply({ content: 'Adding release', flags: MessageFlags.Ephemeral });
+}
+
+async function handleUpdate(interaction) {
+	interaction.reply({ content: 'Updating release', flags: MessageFlags.Ephemeral });
+}
+
+async function handleRemove(interaction) {
+	interaction.reply({ content: 'Removing release', flags: MessageFlags.Ephemeral });
+}
+
+async function handleCheck(interaction) {
+	interaction.reply({ content: 'Checking artist release', flags: MessageFlags.Ephemeral });
+}
 module.exports = {
 	data,
 	async execute(interaction) {
-		interaction.reply({ content: 'Thanks', flags: MessageFlags.Ephemeral });
+		if (interaction.options.getSubcommand() === 'add') {
+			await handleAdd(interaction);
+		}
+		else if (interaction.options.getSubcommand() === 'update') {
+			await handleUpdate(interaction);
+		}
+		else if (interaction.options.getSubcommand() === 'remove') {
+			await handleRemove(interaction);
+		}
+		else if (interaction.options.getSubcommand() === 'check') {
+			await handleCheck(interaction);
+		}
 	},
 };
