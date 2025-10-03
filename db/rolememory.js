@@ -41,6 +41,13 @@ class RoleMemoryDB extends Database {
 		return returndata = data.length == 0 ? true : false;
 	}
 	async migrate() {
+		const database_name = '';
+		if (
+			!this.checkLen(await this.execute('SELECT name FROM sqlite_master WHERE type=\'table\' AND name=\'rolememoryenabled\''))
+		) {
+			return 0;
+		}
+
 		await this.execute(`CREATE TABLE IF NOT EXISTS roleMemory
                 (GUILDID TEXT NOT NULL,
                 ENABLED INTEGER NOT NULL)`);
@@ -49,10 +56,10 @@ class RoleMemoryDB extends Database {
 		await this.execute(`INSERT INTO roleMemory
                 SELECT CAST(GUILDID as TEXT), 
                        ENABLED
-                FROM roleMemoryEnabled`);
+                FROM ${database_name}`);
 
 		// Drop old table
-		await this.execute('DROP TABLE roleMemoryEnabled');
+		await this.execute(`DROP TABLE ${database_name}`);
 
 		logger.info('Successfully migrated roleMemory table');
 	}
@@ -89,6 +96,7 @@ class RoleDB extends Database {
 
 	async migrate() {
 		// Create new table with TEXT columns
+
 		await this.execute(`CREATE TABLE IF NOT EXISTS roles_new
         (UID TEXT NOT NULL,
         RID TEXT NOT NULL)`);
