@@ -34,7 +34,8 @@ const data = new SlashCommandBuilder()
 			.addChannelOption(option =>
 				option
 					.setName('channel')
-					.setDescription('Channel to be removed from archives'),
+					.setDescription('Channel to be removed from archives')
+					.setRequired(true),
 			),
 	);
 
