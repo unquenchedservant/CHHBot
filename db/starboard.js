@@ -133,20 +133,21 @@ class StarboardDB extends Database {
 	}
 
 	async migrate() {
-		await this.execute(`CREATE TABLE IF NOT EXISTS modboard_new
+		await this.execute(`CREATE TABLE IF NOT EXISTS starboard_new
         (MSGID TEXT NOT NULL,
         STARBOARDMSGID TEXT NOT NULL)`);
 
 		// Copy data from old table, converting IDs to strings
 		await this.execute(`INSERT INTO starboard_new 
         SELECT CAST(MSGID as TEXT), CAST(STARBOARDMSGID as TEXT)
-        FROM modboard`);
+        FROM starboard`);
 
 		// Drop old table
 		await this.execute('DROP TABLE starboard');
 
 		// Rename new table to original name
 		await this.execute('ALTER TABLE starboard_new RENAME TO starboard');
+		logger.info('Successfully migrated the starboard database');
 	}
 }
 
@@ -208,6 +209,7 @@ class ModboardDB extends Database {
 
 		// Rename new table to original name
 		await this.execute('ALTER TABLE modboard_new RENAME TO modboard');
+		logger.info('Successfully migrated modboard database');
 	}
 }
 module.exports = {
