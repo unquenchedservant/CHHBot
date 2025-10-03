@@ -20,7 +20,12 @@ const data = new SlashCommandBuilder()
 				option
 					.setName('type')
 					.setDescription('Type of project')
-					.setChoices(['Album', 'Single', 'Mixtape', 'EP'])
+					.setChoices(
+						{ name: 'Album', value: 'Album' },
+						{ name: 'Single', value: 'Single' },
+						{ name: 'Mixtape', value: 'Mixtape' },
+						{ name: 'EP', value: 'EP' },
+					)
 					.setRequired(true),
 			)
 			.addStringOption(option =>
@@ -68,7 +73,13 @@ const data = new SlashCommandBuilder()
 				option
 					.setName('type')
 					.setDescription('Update the type of release')
-					.addChoices(['-', 'Album', 'Single', 'Mixtape', 'EP'])
+					.addChoices(
+						{ name: '-', value: '-' },
+						{ name: 'Album', value: 'Album' },
+						{ name: 'Single', value: 'Single' },
+						{ name: 'Mixtape', value: 'Mixtape' },
+						{ name: 'EP', value: 'EP' },
+					)
 					.setRequired(false),
 			)
 			.addStringOption(option =>
