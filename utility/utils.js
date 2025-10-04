@@ -5,6 +5,19 @@ const { MessageFlags } = require('discord.js');
 dotenv.config();
 
 
+function getUsername(user) {
+	let uname = '';
+	if (user.tag) {
+		uname = user.tag;
+	}
+	else if (user.username) {
+		uname = user.username;
+	}
+	else {
+		uname = user.globalName;
+	}
+	return uname;
+}
 async function check_validity(interaction, user, type) {
 	const userRoles = interaction.member.roles.cache.map(role => role.name.toLowerCase());
 	if (user.bot) {
@@ -40,4 +53,5 @@ async function check_validity(interaction, user, type) {
 
 module.exports = {
 	check_validity,
+	getUsername,
 };
