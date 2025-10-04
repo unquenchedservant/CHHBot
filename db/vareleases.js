@@ -32,28 +32,50 @@ class VAReleasesDB extends Database {
 	}
 
 	async getUserByID(ID) {
-		const data = this.execute(`SELECT UserID FROM vareleases WHERE ID=${ID}`);
+		const data = await this.execute(`SELECT UserID FROM vareleases WHERE ID=${ID}`);
 		return data;
 	}
 
 	async getByID(ID) {
-		const data = this.execute(`SELECT * FROM vareleases WHERE ID=${ID}`);
+		const data = await this.execute(`SELECT * FROM vareleases WHERE ID=${ID}`);
 		return data;
 	}
 
 	async getByUser(userId) {
-		const data = this.execute(`SELECT * FROM vareleases WHERE UserID="${userId}"`);
+		const data = await this.execute(`SELECT * FROM vareleases WHERE UserID=${userId}`);
 		return data;
 	}
 
 	async getByDate(date) {
-		const data = this.execute(`SELECT * FROM vareleases WHERE ReleaseDate="${date}"`);
+		const data = await this.execute(`SELECT * FROM vareleases WHERE ReleaseDate="${date}"`);
 		return data;
 	}
 
 	async check(ID) {
-		const data = this.getUserByID(ID);
+		const data = await this.getUserByID(ID);
 		return this.checkLen(data);
+	}
+
+	async delete(ID) {
+		await this.execute(`DELETE FROM vareleases WHERE ID=${ID}`);
+	}
+
+	async update(ID, releaseTitle = '', releaseDate = '', desc = '', rType = '', link = '') {
+		if (!releaseTitle == '') {
+			await this.execute(`UPDATE vareleases SET ReleaseTitle="${releaseTitle}" WHERE ID=${ID}`);
+		}
+		if (!releaseDate == '') {
+			await this.execute(`UPDATE vareleases SET ReleaseDate="${releaseDate}" WHERE ID=${ID}`);
+		}
+		if (!desc == '') {
+			await this.execute(`UPDATE vareleases SET Desc="${desc}" WHERE ID=${id}`);
+		}
+		if (!rType == '') {
+			await this.execute(`UPDATE vareleases SET TYPE="${rType}" WHERE ID=${id}`);
+		}
+		if (!link == '') {
+			await this.execute(`UPDATE vareleases SET LINK="${link}" WHERE ID=${id}`);
+		}
 	}
 
 	async migrate() {
