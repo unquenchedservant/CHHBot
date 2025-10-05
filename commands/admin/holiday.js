@@ -79,7 +79,7 @@ const data = new SlashCommandBuilder()
 	);
 
 async function add_holiday(month, day, msg) {
-	updated = await holiday_db.add(month, day, msg);
+	const updated = await holiday_db.add(month, day, msg);
 	const responseMsg = updated
 		? `Successfully updated holiday message on ${month}/${day} with the message: ${msg}`
 		: `Successfully saved a new holiday on ${month}/${day} with the message: ${msg}`;
@@ -120,7 +120,7 @@ async function check_holiday(interaction) {
 		await interaction.reply({ content: 'Please enter the holiday day (1-31)', flags: MessageFlags.Ephemeral });
 	}
 	else {
-		mesg = await holiday_db.check(month, day);
+		const mesg = await holiday_db.check(month, day);
 		if (mesg == 0) {
 			await interaction.reply({ content: 'There is no holiday on that day', flags: MessageFlags.Ephemeral });
 		}
