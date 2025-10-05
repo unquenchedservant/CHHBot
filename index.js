@@ -3,7 +3,6 @@ const path = require('node:path');
 
 const logger = require('./utility/logger');
 
-
 const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
 const dotenv = require('dotenv');
 
