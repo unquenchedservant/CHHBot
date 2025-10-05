@@ -15,7 +15,7 @@ class RoleMemoryDB extends Database {
 
 	async check(guild_id) {
 		const data = await this.execute(`SELECT * FROM roleMemory WHERE GUILDID=${guild_id}`);
-		if (!data.length == 0) {
+		if (data) {
 			return data[0].ENABLED;
 		}
 		else {
