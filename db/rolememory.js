@@ -38,7 +38,7 @@ class RoleMemoryDB extends Database {
 
 	async get(guild_id) {
 		const data = await this.execute(`SELECT * FROM roleMemory WHERE GUILDID=${guild_id}`);
-		return returndata = data.length == 0 ? true : false;
+		return data.length == 0 ? true : false;
 	}
 	async migrate() {
 		const database_name = '';
@@ -83,7 +83,7 @@ class RoleDB extends Database {
 
 	async get(user_id) {
 		const data = await this.execute(`SELECT * FROM roles WHERE UID=${user_id}`);
-		roles = [];
+		const roles = [];
 		for (const row of data) {
 			roles.push(row[1]);
 		}
