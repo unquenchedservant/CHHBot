@@ -68,13 +68,13 @@ class VAReleasesDB extends Database {
 			await this.execute(`UPDATE vareleases SET ReleaseDate="${releaseDate}" WHERE ID=${ID}`);
 		}
 		if (!desc == '') {
-			await this.execute(`UPDATE vareleases SET Desc="${desc}" WHERE ID=${id}`);
+			await this.execute(`UPDATE vareleases SET Desc="${desc}" WHERE ID=${ID}`);
 		}
 		if (!rType == '') {
-			await this.execute(`UPDATE vareleases SET TYPE="${rType}" WHERE ID=${id}`);
+			await this.execute(`UPDATE vareleases SET TYPE="${rType}" WHERE ID=${ID}`);
 		}
 		if (!link == '') {
-			await this.execute(`UPDATE vareleases SET LINK="${link}" WHERE ID=${id}`);
+			await this.execute(`UPDATE vareleases SET LINK="${link}" WHERE ID=${ID}`);
 		}
 	}
 
