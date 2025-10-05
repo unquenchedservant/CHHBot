@@ -14,6 +14,7 @@ async function getTrueCount(message) {
 	for (const reaction of message.reactions.cache.values()) {
 		if (reaction.emoji.name === '⭐') {
 			if (!is_dev()) {
+				logger.info('Not dev, fetching reactions for starboard');
 				const users = await reaction.users.fetch();
 				trueCount = Array.from(users.values()).filter(user =>
 					!user.bot && user.id !== message.author.id,
