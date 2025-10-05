@@ -10,6 +10,6 @@ module.exports = {
     data,
     async execute(interaction){
         const annch = interaction.client.channels.fetch(config.get_announcements_channel_id());
-        await annch.send("This is a test, sorry");
+        await annch.send(`This is a test, sorry`);
     }
 }
