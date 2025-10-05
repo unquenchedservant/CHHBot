@@ -14,7 +14,6 @@ const data = new ContextMenuCommandBuilder()
 module.exports = {
 	data,
 	async execute(interaction) {
-		logger.debug('CHECK CHECK');
 		const user = interaction.targetMessage.author;
 		const valid = await check_validity(interaction, user, 'App');
 		if (!valid) return 0;
@@ -32,8 +31,9 @@ module.exports = {
 
 		await interaction.targetMessage.reply({ embeds: [embed] });
 		const report_channel = await interaction.client.channels.cache.get(config.get_report_id());
-		await interaction.reply({ content: 'Thanks, we let the user know about our self-promotion rules', flags: MessageFlags.Ephemeral });
 		const reportMsg = `The following message was tagged for self-promotion by <@${interaction.user.id}:\n${interaction.targetMessage.url}\n`;
+		logger.info(`${interaction.user.name} used the report self promo app command`);
+		await interaction.reply({ content: 'Thanks, we let the user know about our self-promotion rules', flags: MessageFlags.Ephemeral });
 		await report_channel.send(reportMsg);
 	},
 };

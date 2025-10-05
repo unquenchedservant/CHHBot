@@ -3,6 +3,7 @@ const ArchivalDB = require('../../db/archival');
 const { checkMonth } = require('../../utility/dateutils');
 const archival_db = new ArchivalDB();
 const logger = require('../../utility/logger');
+const config = require('../../utility/config');
 
 const data = new SlashCommandBuilder()
 	.setName('archive')
@@ -60,9 +61,10 @@ async function handle_new_archive(channel, level) {
 
 async function channel_move(channel, level, guild) {
 	const new_category_id = level == 1
-		? 'Replace this later'
-		: 'Also replace this later';
+		? config.get_archive_1_id()
+		: config.get_archive_2_id();
 	const category = guild.channels.cache.get(new_category_id);
+	logger.info(`Moving channel ${channel.name} to category id #${new_category_id}`);
 	await channel.setParent(category, {
 		lockPermissions: true,
 		position: 0,

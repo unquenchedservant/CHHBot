@@ -1,3 +1,4 @@
+const logger = require('../utility/logger');
 const Database = require('./database');
 
 class HolidayDB extends Database {
@@ -7,6 +8,7 @@ class HolidayDB extends Database {
 	}
 
 	async create() {
+		logger.info('Checking/creating holidays table');
 		await this.execute(`CREATE TABLE IF NOT EXISTS holidays
                         (MONTH INT NOT NULL,
                         DAY INT NOT NULL,
@@ -18,10 +20,12 @@ class HolidayDB extends Database {
 		let sql = '';
 		const data = await this.execute(`SELECT * FROM holidays WHERE MONTH=${month} AND DAY=${day}`);
 		if (data) {
+			logger.info(`Adding holiday on ${month}/${day} with ${msg} to holidays table`);
 			sql = `INSERT INTO holidays (MONTH, DAY, MSG) VALUES (${month}, ${day}, '${msg}')`;
 		}
 		else {
 			updated = true;
+			logger.info(`Updated holiday on ${month}/${day} with ${msg} to holidays table`);
 			sql = `UPDATE holidays SET MSG='${msg}' WHERE MONTH=${month} AND DAY=${day}`;
 		}
 		await this.execute(sql);
@@ -29,6 +33,7 @@ class HolidayDB extends Database {
 	}
 
 	async check(month, day) {
+		logger.info(`Checking for holiday on ${month}/${day}`);
 		const data = await this.execute(`SELECT MSG FROM holidays WHERE MONTH=${month} AND DAY=${day}`);
 		if (!data) {
 			return 0;
@@ -39,10 +44,12 @@ class HolidayDB extends Database {
 	}
 
 	async check_multi() {
+		logger.info('Getting all holidays');
 		return await this.execute('SELECT * FROM holidays');
 	}
 
 	async remove(month, day) {
+		logger.info(`Removing holiday on ${month}/${day} from the holidays table`);
 		const data = await this.execute(`SELECT * FROM holidays WHERE MONTH=${month} AND DAY=${day}`);
 		if (data.length == 0) {
 			return 0;

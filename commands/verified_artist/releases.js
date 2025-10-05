@@ -242,13 +242,13 @@ async function handleRemove(interaction) {
 		return;
 	}
 	const release = await vaReleasesDB.getByID(id);
-	logger.info(`Release: ${release[0].ReleaseTitle}`);
 	const embedTitle = 'Cancelled Release';
 	const embedDsc = `<@${interaction.user.id}> removed an upcoming release`;
 	const annEmbed = await buildAnnouncementEmbed(embedTitle, embedDsc, release[0].ReleaseTitle, release[0].ReleaseDate, release[0].Desc, release[0].Link, release[0].Type);
 	const annCh = await interaction.client.channels.fetch(config.get_announcements_channel_id());
 	await annCh.send({ embeds: [annEmbed] });
 	await vaReleasesDB.delete(id);
+	logger.info(`${username} successfully removed release ID #${id}`);
 	await interaction.reply({ content: `Successfully deleted release #${id}`, flags: MessageFlags.Ephemeral });
 }
 
@@ -293,15 +293,19 @@ module.exports = {
 	data,
 	async execute(interaction) {
 		if (interaction.options.getSubcommand() === 'add') {
+			logger.info(`'/release add' was called by ${interaction.user.tag}`);
 			await handleAdd(interaction);
 		}
 		else if (interaction.options.getSubcommand() === 'update') {
+			logger.info(`'/release update' was called by ${interaction.user.tag}`);
 			await handleUpdate(interaction);
 		}
 		else if (interaction.options.getSubcommand() === 'remove') {
+			logger.info(`'/release remove' was called by ${interaction.user.tag}`);
 			await handleRemove(interaction);
 		}
 		else if (interaction.options.getSubcommand() === 'check') {
+			logger.info(`'/release check' was called by ${interaction.user.tag}`);
 			await handleCheck(interaction);
 		}
 	},

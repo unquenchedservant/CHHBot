@@ -79,7 +79,6 @@ async function handleAprilFools(message) {
 			await message.react(star);
 		}
 	}
-	// all excluded channels for guild in question
 }
 
 async function checkIds(message) {

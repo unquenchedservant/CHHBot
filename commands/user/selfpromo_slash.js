@@ -21,7 +21,6 @@ module.exports = {
 		let report = false;
 		let title_str = '';
 		let msg = '';
-		logger.info(`user is ${interaction.options.getUser('user')}`);
 
 		if (interaction.options.getUser('user')) {
 			const valid = await check_validity(interaction, interaction.options.getUser('user'), 'slash');
