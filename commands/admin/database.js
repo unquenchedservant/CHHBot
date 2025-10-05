@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
 const { ModboardDB, StarboardDB, StarboardSettingsDB } = require('../../db/starboard');
 const ArchivalDB = require('../../db/archival');
 const BirthdayDB = require('../../db/birthday');
@@ -33,6 +33,6 @@ module.exports = {
 		await roleMemoryDB.migrate();
 		await selfPromoMsgDB.migrate();
 		await vaReleasesDB.migrate();
-		interaction.reply('Database migrated');
+		interaction.reply({ content: 'Database migrated', flags: MessageFlags.Ephemeral });
 	},
 };
