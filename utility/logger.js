@@ -4,7 +4,7 @@ const { is_dev } = require('./environment');
 
 class Logger {
 	constructor() {
-		const fileName = is_dev ? 'chhbot-dev.log' : 'chhbot.log';
+		const fileName = is_dev() ? 'chhbot-dev.log' : 'chhbot.log';
 		this.logFile = path.join('/mnt/logs', fileName);
 
 		if (!fs.existsSync('/mnt/logs')) {
@@ -27,7 +27,7 @@ class Logger {
 
 	_writeLog(level, message) {
 		const timestamp = new Date().toISOString();
-		const botName = is_dev ? 'CHHBOT_DEV' : 'CHHBOT_PROD';
+		const botName = is_dev() ? 'CHHBOT_DEV' : 'CHHBOT_PROD';
 		const logEntry = `${timestamp} - ${botName} - ${level} - ${message}`;
 		fs.appendFileSync(this.logFile, `${logEntry}\n`);
 		console.log(logEntry);
