@@ -17,7 +17,7 @@ class HolidayDB extends Database {
 		let updated = false;
 		let sql = '';
 		const data = await this.execute(`SELECT * FROM holidays WHERE MONTH=${month} AND DAY=${day}`);
-		if (data.length == 0) {
+		if (data) {
 			sql = `INSERT INTO holidays (MONTH, DAY, MSG) VALUES (${month}, ${day}, '${msg}')`;
 		}
 		else {
@@ -30,7 +30,7 @@ class HolidayDB extends Database {
 
 	async check(month, day) {
 		const data = await this.execute(`SELECT MSG FROM holidays WHERE MONTH=${month} AND DAY=${day}`);
-		if (data.length == 0) {
+		if (!data) {
 			return 0;
 		}
 		else {
