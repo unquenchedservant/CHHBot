@@ -41,7 +41,7 @@ class RoleMemoryDB extends Database {
 		return data.length == 0 ? true : false;
 	}
 	async migrate() {
-		const database_name = '';
+		const database_name = 'roleMemoryEnabled';
 
 		await this.execute(`CREATE TABLE IF NOT EXISTS roleMemory
                 (GUILDID TEXT NOT NULL,
