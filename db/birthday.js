@@ -44,9 +44,11 @@ class BirthdayDB extends Database {
 	async check(month, day) {
 		const data = await this.execute(`SELECT USERID, ACTIVE FROM birthdays WHERE MONTH=${month} AND DAY=${day}`);
 		const birthday_ids = [];
-		for (const birthday of data) {
-			if (birthday.ACTIVE === 1 || birthday.ACTIVE === null) {
-				birthday_ids.push(birthday.USERID);
+		if (data) {
+			for (const birthday of data) {
+				if (birthday.ACTIVE === 1 || birthday.ACTIVE === null) {
+					birthday_ids.push(birthday.USERID);
+				}
 			}
 		}
 		return birthday_ids;
