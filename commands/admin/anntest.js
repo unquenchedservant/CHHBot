@@ -9,7 +9,7 @@ const data = new SlashCommandBuilder()
 module.exports = {
     data,
     async execute(interaction){
-        const annch = interaction.client.channels.fetch(config.get_announcements_channel_id());
+        const annch = await interaction.client.channels.fetch(config.get_announcements_channel_id());
         await annch.send(`This is a test, sorry`);
     }
 }
