@@ -4,7 +4,7 @@ const config = require('../../utility/config');
 const data = new SlashCommandBuilder()
     .setName('testpingannouncements')
     .setDescription('Have the bot ping announcements channel')
-    .setDefaultMemberPermission(PermissionFlagsBits.ManageChannels);
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
 
 module.exports = {
     data,
