@@ -2,7 +2,7 @@ const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('disc
 const config = require('../../utility/config');
 
 const data = new SlashCommandBuilder()
-    .setName('testPingAnnouncements')
+    .setName('testpingannouncements')
     .setDescription('Have the bot ping announcements channel')
     .setDefaultMemberPermission(PermissionFlagsBits.ManageChannels);
 
