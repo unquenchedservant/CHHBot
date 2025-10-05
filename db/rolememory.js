@@ -42,11 +42,6 @@ class RoleMemoryDB extends Database {
 	}
 	async migrate() {
 		const database_name = '';
-		if (
-			!this.checkLen(await this.execute('SELECT name FROM sqlite_master WHERE type=\'table\' AND name=\'rolememoryenabled\''))
-		) {
-			return 0;
-		}
 
 		await this.execute(`CREATE TABLE IF NOT EXISTS roleMemory
                 (GUILDID TEXT NOT NULL,
@@ -111,6 +106,7 @@ class RoleDB extends Database {
 
 		// Rename new table to original name
 		await this.execute('ALTER TABLE roles_new RENAME TO roles');
+		logger.info('Successfully migrated roles table');
 	}
 }
 
