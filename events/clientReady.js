@@ -37,7 +37,7 @@ async function channelMove(channel, level, guild) {
 
 async function getChannels(currentMonth, checkDay, modifier = 0) {
 	const check_month = checkMonth(currentMonth - modifier);
-	const channels = archivalDB.get_channels(check_month, checkDay);
+	const channels = await archivalDB.get_channels(check_month, checkDay);
 	if (channels) {
 		const returnChannels = [];
 		for (const channel of channels) {
@@ -49,6 +49,7 @@ async function getChannels(currentMonth, checkDay, modifier = 0) {
 }
 
 async function handleArchives(client) {
+	logger.info('Handling Archives');
 	const currentMonth = new Date().getMonth() + 1;
 	const currentDay = new Date().getDate();
 
@@ -76,6 +77,7 @@ async function handleArchives(client) {
 }
 
 async function handleReleases(client) {
+	logger.info('Handling releases');
 	const today = new Date();
 	const checkDay = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear().toString().slice(-2)}`;
 	const releases = await vaReleasesDB.getByDate(checkDay);
@@ -102,6 +104,7 @@ async function handleReleases(client) {
 }
 
 async function handleHoliday(client) {
+	logger.info('Handling Holidays');
 	const currentMonth = new Date().getMonth() + 1;
 	const currentDay = new Date().getDate();
 	const holidayMsg = await holidayDB.check(currentMonth, currentDay);
@@ -112,6 +115,7 @@ async function handleHoliday(client) {
 }
 
 async function handleBirthday(client) {
+	logger.info('Handling birthdays');
 	const currentMonth = new Date().getMonth() + 1;
 	const currentDay = new Date().getDate();
 
@@ -129,6 +133,7 @@ async function handleBirthday(client) {
 }
 
 async function handleOneOneSix(client) {
+	logger.info('Handling 1/16');
 	const annCh = await client.channels.fetch(config.get_announcements_channel_id());
 	let msg = await holidayDB.check(1, 16);
 	if (!msg) {
