@@ -20,17 +20,6 @@ class SelfPromoMsgDB extends Database {
 		return this.checkLen(data);
 	}
 
-	async migrate() {
-		await this.execute(`CREATE TABLE IF NOT EXISTS selfpromomsg_new
-            (msgID TEXT NOT NULL)`);
-
-		await this.execute(`INSERT INTO selfpromomsg_new
-            SELECT CAST(msgID as TEXT) FROM selfpromomsg`);
-
-		await this.execute('DROP TABLE selfpromomsg');
-
-		await this.execute('ALTER TABLE selfpromomsg_new RENAME TO selfpromomsg');
-	}
 }
 
 module.exports = SelfPromoMsgDB;

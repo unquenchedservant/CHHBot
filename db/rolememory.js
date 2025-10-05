@@ -40,24 +40,6 @@ class RoleMemoryDB extends Database {
 		const data = await this.execute(`SELECT * FROM roleMemory WHERE GUILDID=${guild_id}`);
 		return data.length == 0 ? true : false;
 	}
-	async migrate() {
-		const database_name = 'roleMemoryEnabled';
-
-		await this.execute(`CREATE TABLE IF NOT EXISTS roleMemory
-                (GUILDID TEXT NOT NULL,
-                ENABLED INTEGER NOT NULL)`);
-
-		// Copy data from old table, converting only IDs to strings
-		await this.execute(`INSERT INTO roleMemory
-                SELECT CAST(GUILDID as TEXT), 
-                       ENABLED
-                FROM ${database_name}`);
-
-		// Drop old table
-		await this.execute(`DROP TABLE ${database_name}`);
-
-		logger.info('Successfully migrated roleMemory table');
-	}
 }
 
 class RoleDB extends Database {
@@ -87,26 +69,6 @@ class RoleDB extends Database {
 
 	async remove(user_id) {
 		await this.execute(`DELETE FROM roles WHERE UID=${user_id}`);
-	}
-
-	async migrate() {
-		// Create new table with TEXT columns
-
-		await this.execute(`CREATE TABLE IF NOT EXISTS roles_new
-        (UID TEXT NOT NULL,
-        RID TEXT NOT NULL)`);
-
-		// Copy data from old table, converting IDs to strings
-		await this.execute(`INSERT INTO roles_new 
-        SELECT CAST(UID as TEXT), CAST(RID as TEXT)
-        FROM roles`);
-
-		// Drop old table
-		await this.execute('DROP TABLE roles');
-
-		// Rename new table to original name
-		await this.execute('ALTER TABLE roles_new RENAME TO roles');
-		logger.info('Successfully migrated roles table');
 	}
 }
 

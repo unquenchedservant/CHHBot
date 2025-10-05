@@ -55,30 +55,6 @@ class BirthdayDB extends Database {
 	async remove(user_id) {
 		await this.execute(`DELETE FROM birthdays WHERE USERID=${user_id}`);
 	}
-
-	async migrate() {
-		await this.execute(`CREATE TABLE IF NOT EXISTS birthdays_new
-            (USERID TEXT NOT NULL,
-            MONTH INTEGER NOT NULL,
-            DAY INTEGER NOT NULL,
-            ACTIVE INTEGER NOT NULL)`);
-
-		// Copy data from old table, converting only IDs to strings
-		await this.execute(`INSERT INTO birthdays_new 
-            SELECT CAST(USERID as TEXT), 
-                   MONTH, 
-                   DAY, 
-                   ACTIVE
-            FROM birthdays`);
-
-		// Drop old table
-		await this.execute('DROP TABLE birthdays');
-
-		// Rename new table to original name
-		await this.execute('ALTER TABLE birthdays_new RENAME TO birthdays');
-
-		logger.info('Successfully migrated birthdays table');
-	}
 }
 
 module.exports = BirthdayDB;

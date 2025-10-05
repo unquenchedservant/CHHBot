@@ -64,28 +64,6 @@ class StarboardSettingsDB extends Database {
 	async drop() {
 		await this.execute('DROP TABLE starboardsettings');
 	}
-	async migrate() {
-		// Create new table with TEXT columns for IDs but keep STARBOARDTHRESHOLD as INTEGER
-		await this.execute(`CREATE TABLE IF NOT EXISTS starboardsettings_new
-            (GUILDID TEXT NOT NULL,
-            STARBOARDCHANNEL TEXT NOT NULL,
-            STARBOARDTHRESHOLD INTEGER NOT NULL)`);
-
-		// Copy data from old table, converting only IDs to strings
-		await this.execute(`INSERT INTO starboardsettings_new 
-            SELECT CAST(GUILDID as TEXT), 
-                   CAST(STARBOARDCHANNEL as TEXT),
-                   STARBOARDTHRESHOLD
-            FROM starboardsettings`);
-
-		// Drop old table
-		await this.execute('DROP TABLE starboardsettings');
-
-		// Rename new table to original name
-		await this.execute('ALTER TABLE starboardsettings_new RENAME TO starboardsettings');
-
-		logger.info('Successfully migrated starboardsettings table');
-	}
 }
 
 class StarboardDB extends Database {
@@ -131,24 +109,6 @@ class StarboardDB extends Database {
 	async drop() {
 		await this.execute('DROP TABLE starboard');
 	}
-
-	async migrate() {
-		await this.execute(`CREATE TABLE IF NOT EXISTS starboard_new
-        (MSGID TEXT NOT NULL,
-        STARBOARDMSGID TEXT NOT NULL)`);
-
-		// Copy data from old table, converting IDs to strings
-		await this.execute(`INSERT INTO starboard_new 
-        SELECT CAST(MSGID as TEXT), CAST(STARBOARDMSGID as TEXT)
-        FROM starboard`);
-
-		// Drop old table
-		await this.execute('DROP TABLE starboard');
-
-		// Rename new table to original name
-		await this.execute('ALTER TABLE starboard_new RENAME TO starboard');
-		logger.info('Successfully migrated the starboard database');
-	}
 }
 
 class ModboardDB extends Database {
@@ -192,24 +152,6 @@ class ModboardDB extends Database {
 
 	async drop() {
 		await this.execute('DROP TABLE modboard');
-	}
-
-	async migrate() {
-		await this.execute(`CREATE TABLE IF NOT EXISTS modboard_new
-        (MSGID TEXT NOT NULL,
-        MODBOARDMSGID TEXT NOT NULL)`);
-
-		// Copy data from old table, converting IDs to strings
-		await this.execute(`INSERT INTO modboard_new 
-        SELECT CAST(MSGID as TEXT), CAST(MODBOARDMSGID as TEXT)
-        FROM modboard`);
-
-		// Drop old table
-		await this.execute('DROP TABLE modboard');
-
-		// Rename new table to original name
-		await this.execute('ALTER TABLE modboard_new RENAME TO modboard');
-		logger.info('Successfully migrated modboard database');
 	}
 }
 module.exports = {
