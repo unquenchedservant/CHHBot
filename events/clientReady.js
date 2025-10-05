@@ -127,9 +127,9 @@ async function handleBirthday(client) {
 			msg += `<@${id}>\n`;
 		}
 		msg += '\nWant a message for your birthday? use `/birthday set`';
+		const annCh = await client.channels.fetch(config.get_announcements_channel_id());
+	    await annCh.send({ content: msg });
 	}
-	const annCh = await client.channels.fetch(config.get_announcements_channel_id());
-	await annCh.send({ content: msg });
 }
 
 async function handleOneOneSix(client) {
