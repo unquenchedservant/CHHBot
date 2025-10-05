@@ -122,6 +122,7 @@ async function handleBirthday(client) {
 	const birthday_ids = await birthdayDB.check(currentMonth, currentDay);
 	let msg = '';
 	if (birthday_ids.length > 0) {
+		logger.info('Birthdays found, making announcement post');
 		msg = 'We\'ve got a birthday! Make sure to wish the following people a happy birthday:\n';
 		for (const id of birthday_ids) {
 			msg += `<@${id}>\n`;
@@ -129,6 +130,9 @@ async function handleBirthday(client) {
 		msg += '\nWant a message for your birthday? use `/birthday set`';
 		const annCh = await client.channels.fetch(config.get_announcements_channel_id());
 	    await annCh.send({ content: msg });
+	}
+	else {
+		logger.info(`No Birthdays for ${currentMonth}/${currentDay}`);
 	}
 }
 
