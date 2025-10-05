@@ -42,7 +42,7 @@ const data = new SlashCommandBuilder()
 async function handle_existing_archive(channel, level, check) {
 	if (check[0][3] == 2 && level == 1) {
 		const current_month = checkMonth(new Date().getMonth() + 7);
-		await archival_db.update(channel, level, month = current_month);
+		await archival_db.update(channel, { level, month: current_month });
 	}
 	else {
 		await archival_db.update(channel, level);
