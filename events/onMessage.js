@@ -4,9 +4,9 @@ const config = require('../utility/config');
 
 const benLastSent = new Map();
 const socksLastSent = new Map();
+const vroLastSent = new Map();
 
-const ben_timeout = 30 * 1000;
-const socks_timeout = 30 * 1000;
+const timeout = 30 * 1000;
 
 const allowed = [1, 3, 6, 9, 10];
 const max_rand = 100;
@@ -34,6 +34,17 @@ function getBenLastSent(channelId) {
 	return benLastSent.get(channelId);
 }
 
+function getVroLastSent(channelId) {
+	if (!vroLastSent.has(channelId)) {
+		vroLastSent.set(channelId, 0);
+	}
+	return vroLastSent.get(channelId);
+}
+
+function setVroLastSent(channelId) {
+	vroLastSent.set(channelId, Date.now());
+}
+
 function setBenLastSent(channelId) {
 	benLastSent.set(channelId, Date.now());
 }
@@ -41,7 +52,7 @@ function setBenLastSent(channelId) {
 async function handleBen(message) {
 	const now = Date.now();
 	const lastSent = getBenLastSent(message.channel.id);
-	if (message.content.includes('🥀') && now - lastSent >= ben_timeout) {
+	if (message.content.includes('🥀') && now - lastSent >= timeout) {
 		if (allowed.includes(Math.floor(Math.random() * max_rand) + 1)) {
 			setBenLastSent(message.channel.id);
 			logger.info('Wilted rose');
@@ -51,11 +62,22 @@ async function handleBen(message) {
 	}
 }
 
+async function handleVro(message) {
+	const now = Date.now();
+	const lastSent = getVroLastSent(message.channel.id);
+	if (message.content.toLowerCase().includes('vro') && now - lastSent >= timeout) {
+		if (allowed.includes(Math.floor(Math.random() * max_rand) + 1)) {
+			setVroLastSent(message.channelId);
+			logger.info('Vrooo');
+			await message.channel.send('for some reason i always thought you invented the term “vro” so now when anyone says it here i always think of u');
+		}
+	}
+}
 
 async function handleSocks(message) {
 	const now = Date.now();
 	const lastSent = getSocksLastSent(message.channel.id);
-	if (message.content.toLowerCase().includes('socks') && now - lastSent >= socks_timeout) {
+	if (message.content.toLowerCase().includes('socks') && now - lastSent >= timeout) {
 		if (allowed.includes(Math.floor(Math.random() * max_rand) + 1)) {
 			setSocksLastSent(message.channel.id);
 			logger.info('Socks knocked off');
@@ -106,12 +128,15 @@ async function handleStick(message) {
 		await message.delete();
 	}
 }
+
+
 module.exports = {
 	name: Events.MessageCreate,
 	once: false,
 	async execute(message) {
 		await handleBen(message);
 		await handleSocks(message);
+		await handleVro(message);
 
 		if (message.channel.id == config.get_stick_id()) {
 			await handleStick(message);
