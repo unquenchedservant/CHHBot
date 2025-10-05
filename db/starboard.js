@@ -136,10 +136,7 @@ class ModboardDB extends Database {
 	async get(msg_id) {
 		logger.info(`Msg id in get: ${msg_id}`);
 		const data = await this.execute(`SELECT * FROM modboard WHERE MSGID=${msg_id}`);
-		console.dir(data[0], { depth: null });
-		logger.info(`raw messageboardid : ${data[0].MODBOARDMSGID}`);
-		logger.info(`bigint: ${BigInt(data[0].MODBOARDMSGID)}`);
-		return `${BigInt(data[0].MODBOARDMSGID)}`;
+		return data[0].MODBOARDMSGID;
 	}
 
 	async update(msg_id, modboard_msg_id) {
