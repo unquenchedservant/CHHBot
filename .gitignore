@@ -26,3 +26,4 @@ cogs/openai.py
 
 node_modules/
 startup.sh
+startup.sh
