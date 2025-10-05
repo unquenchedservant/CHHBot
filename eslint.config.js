@@ -1,10 +1,16 @@
 const js = require('@eslint/js');
+const globals = require('globals');
 
 module.exports = [
 	js.configs.recommended,
 	{
 		languageOptions: {
 			ecmaVersion: 'latest',
+			sourceType: 'module',
+			globals: {
+				...globals.node,
+				...globals.es2021,
+			},
 		},
 		rules: {
 			'arrow-spacing': ['warn', { before: true, after: true }],
@@ -29,7 +35,7 @@ module.exports = [
 			'no-shadow': ['error', { allow: ['err', 'resolve', 'reject'] }],
 			'no-trailing-spaces': ['error'],
 			'no-var': 'error',
-			'no-undef': 'off',
+			'no-undef': 'error',
 			'object-curly-spacing': ['error', 'always'],
 			'prefer-const': 'error',
 			quotes: ['error', 'single'],
