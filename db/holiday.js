@@ -35,7 +35,7 @@ class HolidayDB extends Database {
 	async check(month, day) {
 		logger.info(`Checking for holiday on ${month}/${day}`);
 		const data = await this.execute(`SELECT MSG FROM holidays WHERE MONTH=${month} AND DAY=${day}`);
-		if (!data) {
+		if (!this.checkLen(data)) {
 			return 0;
 		}
 		else {
