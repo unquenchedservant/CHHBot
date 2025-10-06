@@ -81,7 +81,7 @@ async function handleReleases(client) {
 	const today = new Date();
 	const checkDay = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear().toString().slice(-2)}`;
 	const releases = await vaReleasesDB.getByDate(checkDay);
-	if (releases) {
+	if (vaReleasesDB.checkLen(releases)) {
 		const embed = new EmbedBuilder()
 			.setTitle('New Release(s) Today');
 		for (const release of releases) {
