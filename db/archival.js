@@ -2,67 +2,78 @@ const logger = require('../utility/logger');
 const Database = require('./database');
 
 class ArchivalDB extends Database {
-	constructor() {
-		super();
-		this.create();
-	}
+  constructor() {
+    super();
+    this.create();
+  }
 
-	async create() {
-		logger.info('checking/creating archive table');
-		await this.execute(`CREATE TABLE IF NOT EXISTS archival
+  async create() {
+    logger.info('checking/creating archive table');
+    await this.execute(`CREATE TABLE IF NOT EXISTS archival
             (CHANNELID TEXT NOT NULL,
             MONTH INTEGER NOT NULL,
             DAY INTEGER NOT NULL,
             LEVEL INTEGER NOT NULL)`);
-	}
+  }
 
-	async get_channels(month, day) {
-		logger.info('Getting channel ids from Archive table');
-		const data = await this.execute(`SELECT CHANNELID FROM archival WHERE MONTH=${month} AND DAY=${day}`);
-		return data.length == 0 ? false : true;
-	}
+  async getChannels(month, day) {
+    logger.info('Getting channel ids from Archive table');
+    const data = await this.execute(
+      'SELECT CHANNELID FROM archival WHERE MONTH = ? AND DAY = ?',
+		  [month, day],
+    );
+    return data.length == 0 ? false : true;
+  }
 
-	async get_level(channel_id) {
-		logger.info('Getting archive level from Archive table');
-		const data = await this.execute(`SELECT LEVEL FROM archival WHERE CHANNELID=${channel_id}`);
-		return data.length == 0 ? false : data;
-	}
+  async getLevel(channelId) {
+    logger.info('Getting archive level from Archive table');
+    const data = await this.execute(
+      'SELECT LEVEL FROM archival WHERE CHANNELID = ?',
+      [channelId],
+    );
+    return data.length == 0 ? false : data;
+  }
 
-	async check(channel_id) {
-		logger.info('Checking if channel id is in Archive table');
-		return await this.execute(`SELECT * FROM archival WHERE CHANNELID=${channel_id}`);
-	}
+  async check(channelId) {
+    logger.info('Checking if channel id is in Archive table');
+    return await this.execute(
+      'SELECT * FROM archival WHERE CHANNELID= ? ',
+      [channelId],
+    );
+  }
 
-	async set(channel_id, month, day, level) {
-		logger.info(`Inserting ${channel_id} to be archived on ${month}/${day} at level : ${level}`);
-		await this.execute(`INSERT INTO archival (CHANNELID, MONTH, DAY, LEVEL) VALUES (${channel_id}, ${month}, ${day}, ${level})`);
-	}
+  async set(channelId, month, day, level) {
+    logger.info(`Inserting ${channelId} to be archived on ${month}/${day} at level : ${level}`);
+    await this.execute(
+      'INSERT INTO archival (CHANNELID, MONTH, DAY, LEVEL) VALUES (?, ?, ?, ?)',
+      [channelId, month, day, level]);
+  }
 
-	async update(channel_id, { level = null, month = null, day = null }) {
-		logger.info('Updating archive table');
-		if (level) {
-			logger.info(`Updating archive level for ${channel_id} to ${level}`);
-			await this.execute(`UPDATE archival SET LEVEL=${level} WHERE CHANNELID=${channel_id}`);
-		}
-		if (month) {
-			logger.info(`Updating archive month for ${channel_id} to ${month}`);
-			await this.execute(`UPDATE archival SET MONTH=${month} WHERE CHANNELID=${channel_id}`);
-		}
-		if (day) {
-			logger.info(`Updating archive day for ${channel_id} to ${day}`);
-			await this.execute(`UPDATE archival set DAY=${day} WHERE CHANNELID=${channel_id}`);
-		}
-	}
+  async update(channelId, { level = null, month = null, day = null }) {
+    logger.info('Updating archive table');
+    if (level) {
+      logger.info(`Updating archive level for ${channelId} to ${level}`);
+      await this.execute('UPDATE archival SET LEVEL = ? WHERE CHANNELID = ?', [level, channelId]);
+    }
+    if (month) {
+      logger.info(`Updating archive month for ${channelId} to ${month}`);
+      await this.execute('UPDATE archival SET MONTH = ? WHERE CHANNELID = ?', [month, channelId]);
+    }
+    if (day) {
+      logger.info(`Updating archive day for ${channelId} to ${day}`);
+      await this.execute('UPDATE archival set DAY = ? WHERE CHANNELID = ?', [day, channelId]);
+    }
+  }
 
-	async remove(channel_id) {
-		logger.info(`Removing ${channel_id} from archival table`);
-		await this.execute(`DELETE FROM archival WHERE CHANNELID='${channel_id}'`);
-	}
+  async remove(channelId) {
+    logger.info(`Removing ${channelId} from archival table`);
+    await this.execute('DELETE FROM archival WHERE CHANNELID = ?', [channelId]);
+  }
 
-	async drop() {
-		logger.warn('Archival table dropped');
-		await this.execute('DROP TABLE archival');
-	}
+  async drop() {
+    logger.warn('Archival table dropped');
+    await this.execute('DROP TABLE archival');
+  }
 
 }
 

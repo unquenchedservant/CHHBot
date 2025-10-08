@@ -1,149 +1,139 @@
-const { is_dev } = require('./environment');
+const { isDev } = require('./environment');
 
+const announcementsIDDev = '471397293229342781';
+const announcementsIDProd = '613469111682334762';
+const archiveLevel1IDDev = '745644736341344276';
+const archiveLevel1IDProd = '615702601354182706';
+const archiveLevel2IDDev = '1383647619448045659';
+const archiveLevel2IDProd = '845039809402634240';
+const guildIDDev = '365879579887534080';
+const guildIDProd = '613464665661636648';
+const modboardIDDev = '1423146320037941301';
+const modboardIDProd = '1366482618140459170';
+const starboardIDDev = '1347392583050985612';
+const starboardIDProd = '786775284484669460';
+const selfPromoIDDev = '1384235493931094136';
+const selfPromoIDProd = '705272855159635969';
+const roleMenuIDDev = '1342571477865730089';
+const roleMenuIDProd = '975067933673914388';
+const rulesIDDev = '1342581100123258952';
+const rulesIDProd = '844989137551228978';
+const reportIDDev = '957645821531258930';
+const reportIDProd = '705532389744705616';
+const stickIDDev = '1384270923196272881';
+const stickIDProd = '742919732478607460';
+const welcomeID = '613468039010320415';
+const artistRoleMenuID = '616100468526940195';
+const partnersID = '797240025653051402';
+const modLogID = '705478973651419167';
+const botCommandsID = '702927203360571483';
+const staffHelpID = '909151861892866158';
+const staffID = '705463143882686564';
+const staffBotID = '685566940122447887';
+const staffPartnerID = '832352549164154900';
+const redditID = '700486332979609671';
+const ownerID = '236394260553924608';
 
 class Config {
-	constructor() {
-		this.ANN_DEV_ID = '471397293229342781';
-		this.ANN_CHH_ID = '613469111682334762';
+  constructor() {
+    /* empty */
+  }
 
-		this.DEV_ARCH_LVL_1_ID = '745644736341344276';
-		this.DEV_ARCH_LVL_2_ID = '1383647619448045659';
+  getStickID() {
+    return isDev() ? stickIDDev : stickIDProd;
+  }
 
-		this.CHH_ARCH_LVL_1_ID = '615702601354182706';
-		this.CHH_ARCH_LVL_2_ID = '845039809402634240';
+  getAnnouncementsID() {
+    return isDev() ? announcementsIDDev : announcementsIDProd;
+  }
 
-		this.DEV_GUILD_ID = '365879579887534080';
-		this.CHH_GUILD_ID = '613464665661636648';
+  getArchive1ID() {
+    return isDev() ? archiveLevel1IDDev : archiveLevel1IDProd;
+  }
 
-		this.MODBOARD_DEV_ID = '1423146320037941301';
-		this.MODBOARD_CHH_ID = '1366482618140459170';
+  getArchive2ID() {
+    return isDev() ? archiveLevel2IDDev : archiveLevel2IDProd;
+  }
 
-		this.STARBOARD_DEV_ID = '1347392583050985612';
-		this.STARBOARD_CHH_ID = '786775284484669460';
+  getGuildIDs() {
+    return isDev() ? [guildIDDev] : [guildIDDev, guildIDProd];
+  }
 
-		this.SLFPRMO_DEV_ID = '1384235493931094136';
-		this.SLFPRMO_CHH_ID = '705272855159635969';
+  getGuildID() {
+    return isDev() ? guildIDDev : guildIDProd;
+  }
 
-		this.ROLEMENU_DEV_ID = '1342571477865730089';
-		this.ROLEMENU_CHH_ID = '975067933673914388';
+  getStarboardID() {
+    return isDev() ? starboardIDDev : starboardIDProd;
+  }
 
-		this.RULES_DEV_ID = '1342581100123258952';
-		this.RULES_CHH_ID = '844989137551228978';
+  getModboardID() {
+    return isDev() ? modboardIDDev : modboardIDProd;
+  }
 
-		this.REPORT_DEV_ID = '957645821531258930';
-		this.REPORT_CHH_ID = '705532389744705616';
+  getSelfPromoID() {
+    return isDev() ? selfPromoIDDev : selfPromoIDProd;
+  }
 
-		this.STICK_DEV_ID = '1384270923196272881';
-		this.STICK_CHH_ID = '742919732478607460';
+  getRoleMenuID() {
+    return isDev() ? roleMenuIDDev : roleMenuIDProd;
+  }
 
-		this.WELCOME_CHANNEL_ID = '613468039010320415';
-		this.ARTIST_ROLE_MENU_CHANNEL_ID = '616100468526940195';
-		this.PARTNERS_CHANNEL_ID = '797240025653051402';
-		this.MOD_LOG_CHANNEL_ID = '705478973651419167';
-		this.BOT_COMMANDS_CHANNEL_ID = '702927203360571483';
-		this.STAFF_HELP_CHANNEL_ID = '909151861892866158';
-		this.STAFF_CHANNEL_ID = '705463143882686564';
-		this.STAFF_BOT_CHANNEL_ID = '685566940122447887';
-		this.STAFF_PARTNER_CHANNEL_ID = '832352549164154900';
-		this.REDDIT_CHANNEL_ID = '700486332979609671';
-		this.OWNER_ID = '236394260553924608';
-	}
+  getRulesID() {
+    return isDev() ? rulesIDDev : rulesIDProd;
+  }
 
-	get_stick_id() {
-		return is_dev() ? this.STICK_DEV_ID : this.STICK_CHH_ID;
-	}
+  getAdminID() {
+    return isDev() ? reportIDDev : reportIDProd;
+  }
 
-	get_announcements_channel_id() {
-		return is_dev() ? this.ANN_DEV_ID : this.ANN_CHH_ID;
-	}
+  getReportID() {
+    return isDev() ? reportIDDev : reportIDProd;
+  }
 
-	get_archive_1_id() {
-		return is_dev() ? this.DEV_ARCH_LVL_1_ID : this.CHH_ARCH_LVL_1_ID;
-	}
+  getStaffID() {
+    return staffID;
+  }
 
-	get_archive_2_id() {
-		return is_dev() ? this.DEV_ARCH_LVL_2_ID : this.CHH_ARCH_LVL_2_ID;
-	}
+  getStaffHelpID() {
+    return staffHelpID;
+  }
 
-	get_guild_ids() {
-		return is_dev() ? [this.DEV_GUILD_ID] : [this.CHH_GUILD_ID, this.DEV_GUILD_ID];
-	}
+  getWelcomeID() {
+    return welcomeID;
+  }
 
-	get_guild_id() {
-		return is_dev() ? this.DEV_GUILD_ID : this.CHH_GUILD_ID;
-	}
+  getArtistRoleMenuID() {
+    return artistRoleMenuID;
+  }
 
-	get_starboard_channel() {
-		return is_dev() ? this.STARBOARD_DEV_ID : this.STARBOARD_CHH_ID;
-	}
+  getPartnersID() {
+    return partnersID;
+  }
 
-	get_modboard_channel() {
-		return is_dev() ? this.MODBOARD_DEV_ID : this.MODBOARD_CHH_ID;
-	}
+  getModLogID() {
+    return modLogID;
+  }
 
-	get_self_promo_id() {
-		return is_dev() ? this.SLFPRMO_DEV_ID : this.SLFPRMO_CHH_ID;
-	}
+  getBotCommandsID() {
+    return botCommandsID;
+  }
 
-	get_role_menu_id() {
-		return is_dev() ? this.ROLEMENU_DEV_ID : this.ROLEMENU_CHH_ID;
-	}
+  getStaffBotID() {
+    return staffBotID;
+  }
 
-	get_rules_id() {
-		return is_dev() ? this.RULES_DEV_ID : this.RULES_CHH_ID;
-	}
+  getStaffPartnerID() {
+    return staffPartnerID;
+  }
 
-	get_admin_id() {
-		return is_dev() ? this.REPORT_DEV_ID : this.REPORT_CHH_ID;
-	}
+  getRedditID() {
+    return redditID;
+  }
 
-	get_report_id() {
-		return is_dev() ? this.REPORT_DEV_ID : this.REPORT_CHH_ID;
-	}
-
-	get_staff_id() {
-		return this.STAFF_CHANNEL_ID;
-	}
-
-	get_staff_help_id() {
-		return this.STAFF_CHANNEL_ID;
-	}
-
-	get_welcome_id() {
-		return this.WELCOME_CHANNEL_ID;
-	}
-
-	get_artist_role_menu_id() {
-		return this.ARTIST_ROLE_MENU_CHANNEL_ID;
-	}
-
-	get_partners_id() {
-		return this.PARTNERS_CHANNEL_ID;
-	}
-
-	get_mod_log_id() {
-		return this.MOD_LOG_CHANNEL_ID;
-	}
-
-	get_bot_commands_id() {
-		return this.BOT_COMMANDS_CHANNEL_ID;
-	}
-
-	get_staff_bot_id() {
-		return this.STAFF_BOT_CHANNEL_ID;
-	}
-
-	get_staff_partner_id() {
-		return this.STAFF_PARTNER_CHANNEL_ID;
-	}
-
-	get_reddit_channel_id() {
-		return this.REDDIT_CHANNEL_ID;
-	}
-
-	get_owner_id() {
-		return this.OWNER_ID;
-	}
-}
+  getOwnerID() {
+    return ownerID;
+  }
+};
 
 module.exports = new Config();
