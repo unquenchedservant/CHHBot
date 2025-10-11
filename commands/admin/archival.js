@@ -41,11 +41,14 @@ const data = new SlashCommandBuilder()
   );
 
 async function handleExistingArchive(channel, level, check) {
+  logger.info('handling existing archive');
   if (check[0][3] == 2 && level == 1) {
     const currentMonth = checkMonth(new Date().getMonth() + 7);
+    logger.info('Updating archivalDB first if');
     await archivalDB.update(channel, { level, month: currentMonth });
   }
   else {
+    logger.info('Updating archivalDB second if');
     await archivalDB.update(channel, level);
   }
 }
@@ -56,19 +59,22 @@ async function handleNewArchive(channel, level) {
   if (level == 2) {
     currentMonth = checkMonth(currentMonth - 3);
   }
+  logger.info('Setting archival DB');
   await archivalDB.set(channel, currentMonth, currentDay, level);
 }
 
 async function channelMove(channel, level, guild) {
+  logger.info(`\nChannel move\nChannel: ${channel}\nLevel: ${level}\nGuild: ${guild}`);
   const newCategoryID = level == 1
     ? config.getArchive1ID()
     : config.getArchive2ID();
-  const category = guild.channels.cache.get(newCategoryID);
+  const category = await guild.channels.cache.get(newCategoryID);
   logger.info(`Moving channel ${channel.name} to category id #${newCategoryID}`);
   await channel.setParent(category, {
     lockPermissions: true,
     position: 0,
   });
+  logger.info(`Moved channel ${channel.name} to category id #${newCategoryID}`);
 }
 
 module.exports = {
@@ -76,10 +82,10 @@ module.exports = {
   async execute(interaction) {
     if (interaction.options.getSubcommand() === 'add') {
       logger.info(`'/archive add' was called by ${interaction.user.tag}`);
-      const check = archivalDB.check(interaction.options.getChannel('channel').id);
+      const check = await archivalDB.check(interaction.options.getChannel('channel').id);
       if (check.length > 0) {
         if (check[0][3] === interaction.options.getInteger('level')) {
-          logger.info('\'/archive add\' was unsuccessfuly');
+          logger.info('\'/archive add\' was unsuccessful');
           await interaction.reply({ content: 'That channel has already been set to be archived at that level.', flags: MessageFlags.Ephemeral });
         }
         else {
