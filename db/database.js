@@ -2,36 +2,49 @@ const sqlite3 = require('sqlite3').verbose();
 const logger = require('../utility/logger');
 
 class Database {
-  constructor() {
-    this.conn = null;
-  }
-
   async execute(query, params = []) {
     return new Promise((resolve, reject) => {
-      try {
-        this.conn = new sqlite3.Database('chh.db');
-        this.conn.all(query, params, (err, rows) => {
+      const db = new sqlite3.Database('chh.db', (openErr) => {
+        logger.error(`Failed to open DB: ${openErr}`);
+        return reject(openErr);
+      });
+
+      const trimmed = query.trim().toUpperCase();
+      if (trimmed.startsWith('SELECT')) {
+        db.all(query, params, (err, rows) => {
           if (err) {
             logger.error(`Database error: ${err}`);
-            reject(err);
+            // eslint-disable-next-line no-inline-comments
+            db.close(() => { /* empty */ });
+            return reject(err);
           }
-          this.conn.close();
-          resolve(rows);
+          db.close((closeErr) => {
+            if (closeErr) logger.error(`Error closing DB: ${closeErr}`);
+            resolve(rows);
+          });
         });
       }
-      catch (err) {
-        console.err(err);
-        reject(err);
+      else {
+        db.run(query, params, function(err) {
+          if (err) {
+            logger.error(`Database Error: ${err}`);
+            // eslint-disable-next-line no-empty-function
+            db.close(() => {});
+            return reject(err);
+          }
+          const result = { lastID: this.lastID, changes: this.changes };
+          db.close((closeErr) => {
+            if (closeErr) logger.error(`Error closing DB: ${closeErr}`);
+            resolve(result);
+          });
+
+        });
       }
     });
   }
 
   checkLen(data) {
     return data.length > 0;
-  }
-
-  close() {
-    if (this.conn) this.conn.close();
   }
 }
 
