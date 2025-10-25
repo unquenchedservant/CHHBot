@@ -101,7 +101,7 @@ async function createModEmbed(message, modCount) {
 }
 
 async function addToStarboard(message, trueCount, starboardChannel) {
-  const embed = createEmbed(message, trueCount);
+  const embed = await createEmbed(message, trueCount);
   const starboardMsg = await starboardChannel.send({ embeds: [embed] });
   starboardDB.add(message.id, starboardMsg.id);
 }
