@@ -29,10 +29,10 @@ module.exports = {
       .setTitle('Please Don\'t Self-Promo')
       .setDescription(msg);
 
-    await interaction.targetMessage.reply({ embeds: [embed] });
     const reportChannel = await interaction.client.channels.cache.get(config.getReportID());
     const reportMsg = `The following message was tagged for self-promotion by <@${interaction.user.id}:\n${interaction.targetMessage.url}\n`;
     logger.info(`${interaction.user.name} used the report self promo app command`);
+    await interaction.targetMessage.reply({ embeds: [embed] });
     await interaction.reply({ content: 'Thanks, we let the user know about our self-promotion rules', flags: MessageFlags.Ephemeral });
     await reportChannel.send(reportMsg);
   },
