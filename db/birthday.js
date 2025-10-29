@@ -61,4 +61,4 @@ class BirthdayDB {
   }
 }
 
-module.exports = BirthdayDB;
+module.exports = new BirthdayDB();

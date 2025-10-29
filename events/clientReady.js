@@ -3,13 +3,12 @@ const logger = require('../utility/logger');
 const Scheduler = require('../utility/scheduler');
 const config = require('../utility/config');
 const HolidayDB = require('../db/holiday');
-const BirthdayDB = require('../db/birthday');
+const birthdayDB = require('../db/birthday');
 const VAReleasesDB = require('../db/vareleases');
 const archivalDB = require('../db/archival');
 const { checkMonth } = require('../utility/dateutils');
 
 const holidayDB = new HolidayDB();
-const birthdayDB = new BirthdayDB();
 const vaReleasesDB = new VAReleasesDB();
 
 async function channelMove(channel, level, guild) {

@@ -1,8 +1,6 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const BirthdayDB = require('../../db/birthday');
+const birthdayDB = require('../../db/birthday');
 const logger = require('../../utility/logger');
-
-const birthdayDB = new BirthdayDB();
 
 const data = new SlashCommandBuilder()
   .setName('birthday')
