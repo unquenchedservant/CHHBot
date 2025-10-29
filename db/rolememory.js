@@ -70,4 +70,7 @@ class RoleDB{
   }
 }
 
-module.exports = { RoleDB, RoleMemoryDB };
+module.exports = { 
+  roleDB: new RoleDB(),
+  roleMemoryDB: new RoleMemoryDB() 
+};

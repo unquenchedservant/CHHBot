@@ -1,8 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const { RoleMemoryDB } = require('../../db/rolememory');
+const { roleMemoryDB } = require('../../db/rolememory');
 const logger = require('../../utility/logger');
-
-const roleMemoryDB = new RoleMemoryDB();
 
 const data = new SlashCommandBuilder()
   .setName('rolememory')
