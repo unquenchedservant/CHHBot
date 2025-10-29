@@ -18,7 +18,7 @@ module.exports = {
   async execute(interaction) {
     logger.info(`'/checkbirthday' was called by ${interaction.user.tag}`);
     const birthday = await birthdayDB.get(interaction.options.getUser('user').id);
-    if (birthday[0] == 0) {
+    if (birthday == "no_birthday") {
       await interaction.reply({ content: 'User does not have a birthday set', flags: MessageFlags.Ephemeral });
     }
     else {

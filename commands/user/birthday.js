@@ -49,7 +49,7 @@ module.exports = {
     else if (interaction.options.getSubcommand() === 'check') {
       logger.info(`'/birthday check' called by ${interaction.user.tag}`);
       const birthday = await birthdayDB.get(interaction.user.id);
-      if (birthday == [0, 0]) {
+      if (birthday == "no_birthday") {
         await interaction.reply({ content: 'You do not have a birthday set, use `/setbirthday` to do so', flags: MessageFlags.Ephemeral });
       }
       else {

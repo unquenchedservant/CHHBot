@@ -14,9 +14,9 @@ class BirthdayDB {
 
   async get(userId) {
     logger.info(`Getting birthdays for ${userId} from birthdays table`);
-    const data = await db.execute('SELECT * FROM birthdays WHERE USERID = ?', [userID]);
+    const data = await db.execute('SELECT * FROM birthdays WHERE USERID = ?', [userId]);
     return data.length === 0
-      ? [0, 0]
+      ? "no_birthday"
       : data[0];
   }
 
