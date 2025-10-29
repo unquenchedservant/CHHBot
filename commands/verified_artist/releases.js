@@ -235,7 +235,7 @@ async function handleRemove(interaction) {
     return;
   }
   const releaseUser = await vaReleasesDB.getUserByID(id);
-  if (!releaseUser[0].UserID == interaction.user.id) {
+  if (releaseUser[0].UserID !== interaction.user.id) {
     logger.info(`${username} tried to remove a release that wasn't theirs`);
     await interaction.reply({ content: 'That release is not yours.', flags: MessageFlags.Ephemeral });
     return;

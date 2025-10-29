@@ -65,23 +65,23 @@ class VAReleasesDB {
   }
 
   async update(ID, releaseTitle = '', releaseDate = '', desc = '', rType = '', link = '') {
-    if (!releaseTitle == '') {
+    if (releaseTitle !== '') {
       logger.info(`Updated title on release ID #${ID} to ${releaseTitle} in the vareleases table`);
       await this.execute(`UPDATE vareleases SET ReleaseTitle="${releaseTitle}" WHERE ID=${ID}`);
     }
-    if (!releaseDate == '') {
+    if (releaseDate !== '') {
       logger.info(`Updated release date on release ID #${ID} to ${releaseDate} in the vareleases table`);
       await this.execute(`UPDATE vareleases SET ReleaseDate="${releaseDate}" WHERE ID=${ID}`);
     }
-    if (!desc == '') {
+    if (desc !== '') {
       logger.info(`Updated desc on release ID #${ID} to ${desc} in vareleases table`);
       await this.execute(`UPDATE vareleases SET Desc="${desc}" WHERE ID=${ID}`);
     }
-    if (!rType == '') {
+    if (rType !== '') {
       logger.info(`Updated type on release ID #${ID} to ${rType} in vareleases table`);
       await this.execute(`UPDATE vareleases SET TYPE="${rType}" WHERE ID=${ID}`);
     }
-    if (!link == '') {
+    if (link !== '') {
       logger.info(`Updated link on release ID #${ID} to ${link} in vareleases table`);
       await this.execute(`UPDATE vareleases SET LINK="${link}" WHERE ID=${ID}`);
     }

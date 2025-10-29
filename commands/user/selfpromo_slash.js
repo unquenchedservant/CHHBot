@@ -47,12 +47,12 @@ module.exports = {
       .setDescription(msg);
 
     if (report) {
+      const user = interaction.options.getUser('user');
+      const reportUser = interaction.user.tag;
       const reportChannel = await interaction.client.channels.cache.get(config.reportID);
       const replyMsg = await interaction.reply({ embeds: embed})
-      const reportMsg = `<@${interaction.options.getUser('user')}> was tagged for self-promotion by <@${interaction.user.tag}>. \n\n Jump to message:${replyMsg.url}\n`;
+      const reportMsg = `<@${user}> was tagged for self-promotion by <@${reportUser}>. \n\n Jump to message:${replyMsg.url}\n`;
       await reportChannel.send(reportMsg);
     }
-
-    const replyMsg = await interaction.reply({ embeds: [embed] });
   },
 };
