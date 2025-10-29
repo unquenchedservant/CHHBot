@@ -3,44 +3,62 @@ const sqlite3 = require('sqlite3').verbose();
 const logger = require('../utility/logger');
 
 class Database {
-  async execute(query, params = []) {
-    return new Promise((resolve, reject) => {
-      const db = new sqlite3.Database('chh.db', (openErr) => {
-        if (openErr) {
-          logger.error(`Failed to open DB: ${openErr}`);
-          return reject(openErr);
-        }
+  constructor() {
+    this.db = null;
+  }
 
-        const trimmed = query.trim().toUpperCase();
-        if (trimmed.startsWith('SELECT')) {
-          db.all(query, params, (err, rows) => {
-            if (err) {
-              logger.error(`Database error: ${err}`);
-              db.close(() => {});
-              return reject(err);
-            }
-            db.close((closeErr) => {
-              if (closeErr) logger.error(`Error closing DB: ${closeErr}`);
-              resolve(rows);
-            });
-          });
-        }
-        else {
-          db.run(query, params, function(err) {
-            if (err) {
-              logger.error(`Database Error: ${err}`);
-              db.close(() => {});
-              return reject(err);
-            }
-            const result = { lastID: this.lastID, changes: this.changes };
-            db.close((closeErr) => {
-              if (closeErr) logger.error(`Error closing DB: ${closeErr}`);
-              resolve(result);
-            });
-          });
+  async connect() {
+    if (this.db) return this.db;
+
+    return new Promise((resolve, reject) => {
+      this.db = new sqlite3.Database('chh.db', (err) => {
+        if (err) {
+          logger.error(`Failed to connect to database: ${err}`);
+          reject(err);
+        } else {
+          logger.info('Connected to database');
+          this.db.run('PRAGMA journal_mode = WAL');
+          resolve(this.db)
         }
       });
     });
+  }
+
+  async execute(query, params = []) {
+    const db = await this.connect();
+
+    return new Promise((resolve, reject) => {
+      const trimmed = query.trim().toUpperCase();
+      if (trimmed.startsWith('SELECT')) {
+        db.all(query, params, (err, rows) => {
+          if (err) {
+            logger.error(`Database error: ${err}`);
+            return reject(err);
+          }
+          resolve(rows);
+        });
+      }
+      else {
+        db.run(query, params, function(err) {
+          if (err) {
+            logger.error(`Database Error: ${err}`);
+            return reject(err);
+          }
+          resolve({ lastID: this.lastID, changes: this.changes })
+        });
+      }
+    });
+  }
+
+  async close() {
+    if (this.db) {
+      return new Promise((resolve, reject) => {
+        this.db.close((err) => {
+          if (err) reject(err);
+          else resolve()
+        });
+      });
+    }
   }
 
   checkLen(data) {
@@ -48,4 +66,4 @@ class Database {
   }
 }
 
-module.exports = Database;
+module.exports = new Database();

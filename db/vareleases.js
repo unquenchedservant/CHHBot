@@ -1,15 +1,11 @@
-const Database = require('./database');
+const db = require('./database');
 const logger = require('../utility/logger');
 
-class VAReleasesDB extends Database {
-  constructor() {
-    super();
-    this.create();
-  }
+class VAReleasesDB {
 
   async create() {
     logger.info('Checking/creating vareleases table');
-    await this.execute(`CREATE TABLE IF NOT EXISTS vareleases
+    await db.execute(`CREATE TABLE IF NOT EXISTS vareleases
             (ID INTEGER PRIMARY KEY AUTOINCREMENT,
             UserID TEXT NOT NULL,
             UserName VARCHAR(100) NOT NULL,
@@ -59,8 +55,8 @@ class VAReleasesDB extends Database {
 
   async check(ID) {
     logger.info(`Checking that ID #${ID} exists in the vareleases table`);
-    const data = await this.getUserByID(ID);
-    return this.checkLen(data);
+    const data = await getUserByID(ID);
+    return db.checkLen(data);
   }
 
   async delete(ID) {

@@ -1,22 +1,18 @@
 const logger = require('../utility/logger');
-const Database = require('./database');
+const db = require('./database');
 
-class RoleMemoryDB extends Database {
-  constructor() {
-    super();
-    this.create();
-  }
+class RoleMemoryDB{
 
   async create() {
     logger.info('Checking/creating roleMemory table');
-    await this.execute(`CREATE TABLE IF NOT EXISTS roleMemory
+    await db.execute(`CREATE TABLE IF NOT EXISTS roleMemory
             (GUILDID TEXT NOT NULL,
             ENABLED INT NOT NULL)`);
   }
 
   async check(guildID) {
     logger.info('Checking if role memory is enabled in the roleMemory table');
-    const data = await this.execute(`SELECT * FROM roleMemory WHERE GUILDID=${guildID}`);
+    const data = await db.execute('SELECT * FROM roleMemory WHERE GUILDID=?', [guildID]);
     if (data) {
       return data[0].ENABLED;
     }
@@ -27,45 +23,40 @@ class RoleMemoryDB extends Database {
 
   async toggle(guildID) {
     logger.info(`Toggling role memory for ${guildID} in the roleMemory table`);
-    const data = await this.execute(`SELECT * FROM roleMemory WHERE GUILDID=${guildID}`);
+    const data = await db.execute('SELECT * FROM roleMemory WHERE GUILDID=?', [guildID]);
     let newEnabled = 1;
-    if (!data.length == 0) {
+    if (data.length !== 0) {
       newEnabled = data[0].ENABLED == 0 ? 1 : 0;
-      await this.execute(`UPDATE roleMemory SET ENABLED=${newEnabled} WHERE GUILDID=${guildID}`);
+      await db.execute('UPDATE roleMemory SET ENABLED=? WHERE GUILDID=?', [newEnabled, guildID]);
     }
     else {
-      await this.execute(`INSERT INTO roleMemory (GUILDID, ENABLED) VALUES (${guildID}, ${1})`);
+      await db.execute('INSERT INTO roleMemory (GUILDID, ENABLED) VALUES (?, 1)', guildID);
     }
   }
 
   async get(guildID) {
     logger.info(`Getting roleMemory status for ${guildID} from the roleMemory table`);
-    const data = await this.execute(`SELECT * FROM roleMemory WHERE GUILDID=${guildID}`);
+    const data = await db.execute('SELECT * FROM roleMemory WHERE GUILDID=?', [guildID]);
     return data.length == 0 ? true : false;
   }
 }
 
-class RoleDB extends Database {
-  constructor() {
-    super();
-    this.create();
-  }
-
+class RoleDB{
   async create() {
     logger.info('Checking/creating roles table');
-    await this.execute(`CREATE TABLE IF NOT EXISTS roles
+    await db.execute(`CREATE TABLE IF NOT EXISTS roles
             (UID INT NOT NULL,
             RID INT NOT NULL)`);
   }
 
   async add(userID, roleID) {
     logger.info(`Adding role ID #${roleID} for user ID #${userID} in the roles table`);
-    await this.execute(`INSERT INTO roles (UID, RID) VALUES (${userID}, ${roleID})`);
+    await db.execute('INSERT INTO roles (UID, RID) VALUES (?, ?)', [userID, roleID]);
   }
 
   async get(userID) {
     logger.info(`Getting user ID #${userID}'s roles`);
-    const data = await this.execute(`SELECT * FROM roles WHERE UID=${userID}`);
+    const data = await db.execute('SELECT * FROM roles WHERE UID=?', [userID]);
     const roles = [];
     for (const row of data) {
       roles.push(row[1]);
@@ -75,7 +66,7 @@ class RoleDB extends Database {
 
   async remove(userID) {
     logger.info(`Removing roles from user ID #${userID}`);
-    await this.execute(`DELETE FROM roles WHERE UID=${userID}`);
+    await db.execute('DELETE FROM roles WHERE UID=?', [userID]);
   }
 }
 
