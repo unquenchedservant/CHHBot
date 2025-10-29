@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, MessageFlags, EmbedBuilder, ModalBuilder } = require('discord.js');
-const VAReleasesDB = require('../../db/vareleases');
-const vaReleasesDB = new VAReleasesDB();
+const vaReleasesDB = require('../../db/vareleases');
 const logger = require('../../utility/logger');
 const { getUsername } = require('../../utility/utils');
 

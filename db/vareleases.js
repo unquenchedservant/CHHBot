@@ -88,4 +88,4 @@ class VAReleasesDB {
   }
 }
 
-module.exports = VAReleasesDB;
+module.exports = new VAReleasesDB();

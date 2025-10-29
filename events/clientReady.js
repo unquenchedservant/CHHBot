@@ -4,11 +4,9 @@ const Scheduler = require('../utility/scheduler');
 const config = require('../utility/config');
 const holidayDB = require('../db/holiday');
 const birthdayDB = require('../db/birthday');
-const VAReleasesDB = require('../db/vareleases');
+const vaReleasesDB = require('../db/vareleases');
 const archivalDB = require('../db/archival');
 const { checkMonth } = require('../utility/dateutils');
-
-const vaReleasesDB = new VAReleasesDB();
 
 async function channelMove(channel, level, guild) {
   let newCategoryId = 0;
