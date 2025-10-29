@@ -1,53 +1,61 @@
-const fs = require('fs');
+const fs = require('fs').promises;
+const fsSync = require('fs');
 const path = require('path');
 const { isDev } = require('./environment');
 
 class Logger {
   constructor() {
     const fileName = isDev() ? 'chhbot-dev.log' : 'chhbot.log';
-    this.logFile = path.join('/mnt/logs', fileName);
+    const logDir = process.env.LOG_DIR || '/mnt/logs';
+    this.logFile = path.join(logDir, fileName);
+    this.queue = [];
+    this.isWriting = false;
 
-    if (!fs.existsSync('/mnt/logs')) {
+    if (!fsSync.existsSync(logDir)) {
       try {
-        fs.mkdirSync('/mnt/logs', { recursive: true });
-      }
-      catch {
-        console.error('Unable to create logs directory.');
+        fsSync.mkdirSync(logDir, { recursive: true });
+      } catch (error){
+        console.error(`Unable to create log directory at ${logDir}:`, error);
         process.exit(1);
       }
     }
-    try {
-      fs.accessSync('/mnt/logs', fs.constants.W_OK);
-    }
-    catch (error) {
-      console.error('No write permission to /mnt/logs:', error);
-      process.exit(1);
-    }
   }
 
-  _writeLog(level, message) {
+  async _writeLog(level, message) {
     const timestamp = new Date().toISOString();
     const botName = isDev() ? 'CHHBOT_DEV' : 'CHHBOT_PROD';
     const logEntry = `${timestamp} - ${botName} - ${level} - ${message}`;
-    fs.appendFileSync(this.logFile, `${logEntry}\n`);
     console.log(logEntry);
+    this.queue.push(logEntry);
+    if(!this.isWriting){
+      this._flushQueue();
+    }
   }
 
-  info(message) {
-    this._writeLog('INFO', message);
+  async _flushQueue(){
+    if (this.queue.length === 0){
+      this.isWriting = false;
+      return;
+    }
+    this.isWriting = true;
+    const entry = this.queue.splice(0,100);
+
+    try {
+      await fs.appendFile(this.logFile, entry.join(''));
+    }catch (err){
+      console.error('Failed to write log entry:', err);
+    }
+
+    setImmediate(() => this._flushQueue());
   }
 
-  error(message) {
-    this._writeLog('ERROR', message);
-  }
+  info(message) { this._writeLog('INFO', message); }
 
-  warn(message) {
-    this._writeLog('WARNING', message);
-  }
+  error(message) { this._writeLog('ERROR', message); }
 
-  debug(message) {
-    this._writeLog('DEBUG', message);
-  }
+  warn(message) { this._writeLog('WARNING', message); }
+
+  debug(message) { this._writeLog('DEBUG', message); }
 }
 
 module.exports = new Logger();
