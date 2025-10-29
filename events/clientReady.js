@@ -2,13 +2,12 @@ const { Events, EmbedBuilder } = require('discord.js');
 const logger = require('../utility/logger');
 const Scheduler = require('../utility/scheduler');
 const config = require('../utility/config');
-const HolidayDB = require('../db/holiday');
+const holidayDB = require('../db/holiday');
 const birthdayDB = require('../db/birthday');
 const VAReleasesDB = require('../db/vareleases');
 const archivalDB = require('../db/archival');
 const { checkMonth } = require('../utility/dateutils');
 
-const holidayDB = new HolidayDB();
 const vaReleasesDB = new VAReleasesDB();
 
 async function channelMove(channel, level, guild) {

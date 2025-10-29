@@ -59,4 +59,4 @@ class HolidayDB{
   }
 }
 
-module.exports = HolidayDB;
+module.exports = new HolidayDB();
