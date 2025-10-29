@@ -2,6 +2,9 @@ const logger = require('../utility/logger');
 const db = require('./database');
 
 class BirthdayDB {
+  constructor() {
+    this.create();
+  }
 
   async create() {
     logger.info('Checking/creating birthdays table');

@@ -2,7 +2,9 @@ const db = require('./database');
 const logger = require('../utility/logger');
 
 class VAReleasesDB {
-
+  constructor() {
+    this.create();
+  }
   async create() {
     logger.info('Checking/creating vareleases table');
     await db.execute(`CREATE TABLE IF NOT EXISTS vareleases

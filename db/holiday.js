@@ -2,6 +2,9 @@ const logger = require('../utility/logger');
 const db = require('./database');
 
 class HolidayDB{
+  constructor() {
+    this.create();
+  }
   async create() {
     logger.info('Checking/creating holidays table');
     await db.execute(`CREATE TABLE IF NOT EXISTS holidays

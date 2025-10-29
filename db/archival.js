@@ -2,7 +2,9 @@ const logger = require('../utility/logger');
 const db = require('./database');
 
 class ArchivalDB {
-
+  constructor() {
+    this.create();
+  }
   async create() {
     logger.info('checking/creating archive table');
     await db.execute(`CREATE TABLE IF NOT EXISTS archival

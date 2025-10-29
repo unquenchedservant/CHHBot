@@ -1,7 +1,9 @@
 const db = require('./database');
 const logger = require('../utility/logger');
 class StarboardSettingsDB {
-
+  constructor() {
+    this.create();
+  }
   async create() {
     logger.info('Checking/creating starboardsettings table');
     await db.execute(`CREATE TABLE IF NOT EXISTS starboardsettings
@@ -72,6 +74,9 @@ class StarboardSettingsDB {
 }
 
 class StarboardDB {
+  constructor() {
+    this.create();
+  }
   async create() {
     logger.info('Checking/creating starboard table');
     await db.execute(`CREATE TABLE IF NOT EXISTS starboard
@@ -118,12 +123,10 @@ class StarboardDB {
   }
 }
 
-class ModboardDB extends Database {
+class ModboardDB {
   constructor() {
-    super();
     this.create();
   }
-
   async create() {
     logger.info('Checking/creating modboard table');
     await db.execute(`CREATE TABLE IF NOT EXISTS modboard

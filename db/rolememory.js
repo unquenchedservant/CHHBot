@@ -2,7 +2,9 @@ const logger = require('../utility/logger');
 const db = require('./database');
 
 class RoleMemoryDB{
-
+  constructor() {
+    this.create();
+  }
   async create() {
     logger.info('Checking/creating roleMemory table');
     await db.execute(`CREATE TABLE IF NOT EXISTS roleMemory
@@ -42,6 +44,9 @@ class RoleMemoryDB{
 }
 
 class RoleDB{
+  constructor() {
+    this.create();
+  }
   async create() {
     logger.info('Checking/creating roles table');
     await db.execute(`CREATE TABLE IF NOT EXISTS roles
