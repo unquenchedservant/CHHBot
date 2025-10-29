@@ -73,4 +73,4 @@ class ArchivalDB {
 
 }
 
-module.exports = ArchivalDB;
+module.exports = new ArchivalDB();

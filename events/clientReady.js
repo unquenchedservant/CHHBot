@@ -5,13 +5,12 @@ const config = require('../utility/config');
 const HolidayDB = require('../db/holiday');
 const BirthdayDB = require('../db/birthday');
 const VAReleasesDB = require('../db/vareleases');
-const ArchivalDB = require('../db/archival');
+const archivalDB = require('../db/archival');
 const { checkMonth } = require('../utility/dateutils');
 
 const holidayDB = new HolidayDB();
 const birthdayDB = new BirthdayDB();
 const vaReleasesDB = new VAReleasesDB();
-const archivalDB = new ArchivalDB();
 
 async function channelMove(channel, level, guild) {
   let newCategoryId = 0;
