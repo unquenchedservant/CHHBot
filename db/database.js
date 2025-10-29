@@ -54,8 +54,14 @@ class Database {
     if (this.db) {
       return new Promise((resolve, reject) => {
         this.db.close((err) => {
-          if (err) reject(err);
-          else resolve()
+          if (err) {
+            logger.error(`Failed to close database: ${err}`);
+            return reject(err);
+          }
+          // ensure we clear the reference so future connect() will recreate it
+          this.db = null;
+          logger.info('Database connection closed');
+          resolve();
         });
       });
     }

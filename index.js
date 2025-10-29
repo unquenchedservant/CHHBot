@@ -1,5 +1,10 @@
+const { validateEnv } = require('./utility/environment');
+validateEnv();
 const fs = require('node:fs');
 const path = require('node:path');
+const db = require('./db/database');
+
+
 
 const logger = require('./utility/logger');
 
@@ -59,3 +64,35 @@ for (const file of eventFiles) {
 }
 
 client.login(token);
+
+// Graceful shutdown: close Discord client and DB on signals/errors
+async function gracefulShutdown(code = 0) {
+  try {
+    logger.info('Graceful shutdown initiated');
+    if (client) {
+      try { await client.destroy(); } catch (err) { logger.error(`Error destroying client: ${err}`); }
+    }
+  }
+  finally {
+    try {
+      await db.close();
+    } catch (err) {
+      logger.error(`Error closing database: ${err}`);
+    }
+    process.exit(code);
+  }
+}
+
+process.on('SIGINT', () => gracefulShutdown(0));
+process.on('SIGTERM', () => gracefulShutdown(0));
+
+process.on('uncaughtException', (err) => {
+  logger.error(`Uncaught Exception: ${err.stack || err}`);
+  // attempt graceful shutdown with non-zero exit
+  gracefulShutdown(1);
+});
+
+process.on('unhandledRejection', (reason) => {
+  logger.error(`Unhandled Rejection: ${reason}`);
+  gracefulShutdown(1);
+});
