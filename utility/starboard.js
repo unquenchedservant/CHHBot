@@ -1,13 +1,8 @@
 const { EmbedBuilder } = require('discord.js');
-const { StarboardSettingsDB, StarboardDB, ModboardDB } = require('../db/starboard');
+const { starboardSettingsDB, starboardDB, modboardDB } = require('../db/starboard');
 const config = require('../utility/config');
 const { isDev } = require('../utility/environment');
 const logger = require('./logger');
-
-const starboardSettingsDB = new StarboardSettingsDB();
-const starboardDB = new StarboardDB();
-const modboardDB = new ModboardDB();
-
 
 async function getTrueCount(message) {
   let trueCount = 0;

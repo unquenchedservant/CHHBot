@@ -1,12 +1,9 @@
 const { Events } = require('discord.js');
 const logger = require('../utility/logger');
-const { StarboardSettingsDB, StarboardDB } = require('../db/starboard');
+const { starboardSettingsDB, starboardDB } = require('../db/starboard');
 const config = require('../utility/config');
 
 const { getTrueCount, getModCount, handleModboard, addToStarboard, updateStarboard } = require('../utility/starboard.js');
-
-const starboardSettingsDB = new StarboardSettingsDB();
-const starboardDB = new StarboardDB();
 
 module.exports = {
   name: Events.MessageReactionAdd,

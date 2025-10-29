@@ -1,8 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const { StarboardSettingsDB } = require('../../db/starboard');
+const { starboardSettingsDB } = require('../../db/starboard');
 const logger = require('../../utility/logger');
-
-const starboardSettingsDB = new StarboardSettingsDB();
 
 const data = new SlashCommandBuilder()
   .setName('starboard')

@@ -164,7 +164,7 @@ class ModboardDB extends Database {
   }
 }
 module.exports = {
-  StarboardDB,
-  ModboardDB,
-  StarboardSettingsDB,
+  starboardDB: new StarboardDB(),
+  modboardDB: new ModboardDB(),
+  starboardSettingsDB: new StarboardSettingsDB(),
 };
