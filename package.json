@@ -7,9 +7,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "git pull && node deploy-commands.js && node index.js",
-    "dev": "node deploy-commands.js && node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "NODE_ENV=development node deploy-commands.js && NODE_ENV=development node index.js",
+    "deploy": "node deploy-commands.js",
+    "test": "jest"
   },
   "dependencies": {
     "discord.js": "^14.22.1",
