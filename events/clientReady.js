@@ -16,10 +16,10 @@ const archivalDB = new ArchivalDB();
 async function channelMove(channel, level, guild) {
   let newCategoryId = 0;
   if (level === 1) {
-    newCategoryId = config.getArchive1ID();
+    newCategoryId = config.archival1ID;
   }
   else if (level === 2) {
-    newCategoryId = config.getArchive2ID();
+    newCategoryId = config.archival2ID;
   }
   try {
     const category = await guild.channels.fetch(newCategoryId);
@@ -53,7 +53,7 @@ async function handleArchives(client) {
   const currentMonth = new Date().getMonth() + 1;
   const currentDay = new Date().getDate();
 
-  const guild = await client.guilds.fetch(config.getGuildID());
+  const guild = await client.guilds.fetch(config.guildID);
 
   const threeChannels = await getChannels(currentMonth, currentDay, 3);
   if (threeChannels) {
@@ -97,7 +97,7 @@ async function handleReleases(client) {
         { name: `${title}`, value: fieldValue },
       );
     }
-    const annCh = await client.channels.fetch(config.getAnnouncementsID());
+    const annCh = await client.channels.fetch(config.announcementsID);
 	    await annCh.send({ embeds: [embed] });
   }
   return;
@@ -109,7 +109,7 @@ async function handleHoliday(client) {
   const currentDay = new Date().getDate();
   const holidayMsg = await holidayDB.check(currentMonth, currentDay);
   if (holidayMsg && !(currentMonth === 1 && currentDay === 16)) {
-    const annCh = await client.channels.fetch(config.getAnnouncementsID());
+    const annCh = await client.channels.fetch(config.announcementsID);
 	    await annCh.send({ content: holidayMsg });
   }
 }
@@ -128,7 +128,7 @@ async function handleBirthday(client) {
       msg += `<@${id}>\n`;
     }
     msg += '\nWant a message for your birthday? use `/birthday set`';
-    const annCh = await client.channels.fetch(config.getAnnouncementsID());
+    const annCh = await client.channels.fetch(config.announcementsID);
 	    await annCh.send({ content: msg });
   }
   else {
@@ -138,7 +138,7 @@ async function handleBirthday(client) {
 
 async function handleOneOneSix(client) {
   logger.info('Handling 1/16');
-  const annCh = await client.channels.fetch(config.getAnnouncementsID());
+  const annCh = await client.channels.fetch(config.announcementsID);
   let msg = await holidayDB.check(1, 16);
   if (!msg) {
     msg = 'LET ME HEAR YOU SHOUT 1 1 6!\nHappy 116 Day, everyone!';

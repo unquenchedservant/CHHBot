@@ -89,11 +89,11 @@ async function handleSocks(message) {
 async function handleAprilFools(message) {
   const star = '⭐';
 
-  const excludedChannels = [config.getStaffHelpID(), config.getStaffID(), config.getStaffBotID(),
-    config.getReportID(), config.getStaffPartnerID, config.getRedditID(), config.getStarboardID(),
-    902769402573881375n, config.getBotCommandsID, config.getModLogID(), 705478446075215893n,
-    config.getAnnouncementsID(), config.getPartnersID(), config.getArtistRoleMenuID(),
-    776157426113970207n, config.getRulesID(), config.getWelcomeID()];
+  const excludedChannels = [config.staffHelpID, config.staffID, config.staffBotID,
+    config.reportID, config.staffPartnerID, config.redditID, config.starboardID,
+    902769402573881375n, config.botCommandsID, config.modLogID, 705478446075215893n,
+    config.announcementsID, config.partnersID, config.artistRoleMenuID,
+    776157426113970207n, config.rulesID, config.welcomeID];
 
   if (!message.author.bot && !excludedChannels.includes(message.channel.id)) {
     const afAllowed = [3, 8];
@@ -138,7 +138,7 @@ module.exports = {
     await handleSocks(message);
     await handleVro(message);
 
-    if (message.channel.id == config.getStickID()) {
+    if (message.channel.id == config.stickID) {
       await handleStick(message);
     }
 

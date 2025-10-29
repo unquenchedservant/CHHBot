@@ -34,106 +34,20 @@ const staffPartnerID = '832352549164154900';
 const redditID = '700486332979609671';
 const ownerID = '236394260553924608';
 
-class Config {
-  constructor() {
-    /* empty */
-  }
-
-  getStickID() {
-    return isDev() ? stickIDDev : stickIDProd;
-  }
-
-  getAnnouncementsID() {
-    return isDev() ? announcementsIDDev : announcementsIDProd;
-  }
-
-  getArchive1ID() {
-    return isDev() ? archiveLevel1IDDev : archiveLevel1IDProd;
-  }
-
-  getArchive2ID() {
-    return isDev() ? archiveLevel2IDDev : archiveLevel2IDProd;
-  }
-
-  getGuildIDs() {
-    return isDev() ? [guildIDDev] : [guildIDDev, guildIDProd];
-  }
-
-  getGuildID() {
-    return isDev() ? guildIDDev : guildIDProd;
-  }
-
-  getStarboardID() {
-    return isDev() ? starboardIDDev : starboardIDProd;
-  }
-
-  getModboardID() {
-    return isDev() ? modboardIDDev : modboardIDProd;
-  }
-
-  getSelfPromoID() {
-    return isDev() ? selfPromoIDDev : selfPromoIDProd;
-  }
-
-  getRoleMenuID() {
-    return isDev() ? roleMenuIDDev : roleMenuIDProd;
-  }
-
-  getRulesID() {
-    return isDev() ? rulesIDDev : rulesIDProd;
-  }
-
-  getAdminID() {
-    return isDev() ? reportIDDev : reportIDProd;
-  }
-
-  getReportID() {
-    return isDev() ? reportIDDev : reportIDProd;
-  }
-
-  getStaffID() {
-    return staffID;
-  }
-
-  getStaffHelpID() {
-    return staffHelpID;
-  }
-
-  getWelcomeID() {
-    return welcomeID;
-  }
-
-  getArtistRoleMenuID() {
-    return artistRoleMenuID;
-  }
-
-  getPartnersID() {
-    return partnersID;
-  }
-
-  getModLogID() {
-    return modLogID;
-  }
-
-  getBotCommandsID() {
-    return botCommandsID;
-  }
-
-  getStaffBotID() {
-    return staffBotID;
-  }
-
-  getStaffPartnerID() {
-    return staffPartnerID;
-  }
-
-  getRedditID() {
-    return redditID;
-  }
-
-  getOwnerID() {
-    return ownerID;
-  }
-};
-
-module.exports = new Config();
+module.exports = {
+  stickID: isDev() ? stickIDDev : stickIDProd,
+  announcementsID: isDev() ? announcementsIDDev : announcementsIDProd,
+  archival1ID: isDev() ? archiveLevel1IDDev : archiveLevel1IDProd,
+  archival2ID: isDev() ? archiveLevel2IDDev : archiveLevel2IDProd,
+  guildIDs: isDev() ? [guildIDDev] : [guildIDDev, guildIDProd],
+  guildID: isDev() ? guildIDDev : guildIDProd,
+  starboardID: isDev() ? starboardIDDev : starboardIDProd,
+  modboardID: isDev() ? modboardIDDev : modboardIDProd,
+  selfPromoID: isDev() ? selfPromoIDDev : selfPromoIDProd,
+  roleMenuID: isDev() ? roleMenuIDDev : roleMenuIDProd,
+  rulesID: isDev() ? rulesIDDev : rulesIDProd,
+  adminID: isDev() ? reportIDDev : reportIDProd,
+  reportID: isDev() ? reportIDDev : reportIDProd,
+  staffID, staffHelpID, welcomeID, artistRoleMenuID, partnersID,
+  modLogID, botCommandsID, staffBotID, staffPartnerID, redditID, ownerID
+}

@@ -66,8 +66,8 @@ async function handleNewArchive(channel, level) {
 async function channelMove(channel, level, guild) {
   logger.info(`\nChannel move\nChannel: ${channel}\nLevel: ${level}\nGuild: ${guild}`);
   const newCategoryID = level == 1
-    ? config.getArchive1ID()
-    : config.getArchive2ID();
+    ? config.archival1ID
+    : config.archival2ID;
   const category = await guild.channels.cache.get(newCategoryID);
   logger.info(`Moving channel ${channel.name} to category id #${newCategoryID}`);
   await channel.setParent(category, {

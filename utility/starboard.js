@@ -49,11 +49,11 @@ async function getModCount(message) {
 }
 
 async function handleModboard(message, modCount, payload) {
-  const modboardChannelID = config.getModboardID();
+  const modboardChannelID = config.modboardID;
   const modboardChannel = await payload.client.channels.fetch(modboardChannelID);
   const onModboard = await modboardDB.check(payload.message.id);
   const trueCount = await getTrueCount(message);
-  const threshold = await starboardSettingsDB.getThreshold(config.getGuildID());
+  const threshold = await starboardSettingsDB.getThreshold(config.guildID);
   if (modCount > 0 && trueCount < threshold) {
     if (!onModboard) {
       const modboardEmbed = await createModEmbed(message, modCount);

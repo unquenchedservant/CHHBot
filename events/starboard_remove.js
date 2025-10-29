@@ -19,8 +19,8 @@ module.exports = {
 
       await handleModboard(message, modCount, payload);
 
-      const starboardChannel = await payload.client.channels.fetch(config.getStarboardID());
-      const threshold = await starboardSettingsDB.getThreshold(config.getGuildID());
+      const starboardChannel = await payload.client.channels.fetch(config.starboardID);
+      const threshold = await starboardSettingsDB.getThreshold(config.guildID);
 
       if (trueCount < threshold) {
         if (await starboardDB.check(payload.message.id)) {

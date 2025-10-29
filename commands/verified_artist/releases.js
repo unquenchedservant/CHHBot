@@ -168,7 +168,7 @@ async function handleAdd(interaction) {
   const embedTitle = 'New Release Added';
   const embedDsc = `<@${userID}> announced a new project!`;
   const annEmbed = await buildAnnouncementEmbed(embedTitle, embedDsc, title, releaseDate, desc, link, rType);
-  const annCh = await interaction.client.channels.fetch(config.getAnnouncementsID());
+  const annCh = await interaction.client.channels.fetch(config.announcementsID);
   await annCh.send({ embeds: [annEmbed] });
   interaction.reply({ content: `Successfully added that release, ID #${id}. Please use this ID to update or delete your release at any time`, flags: MessageFlags.Ephemeral });
 }
@@ -222,7 +222,7 @@ async function handleUpdate(interaction) {
   const embedTitle = 'Updated Release';
   const embedDsc = `<@${interaction.user.id}> updated an upcoming release`;
   const annEmbed = await buildAnnouncementEmbed(embedTitle, embedDsc, release[0].ReleaseTitle, release[0].ReleaseDate, release[0].Desc, release[0].Link, release[0].Type);
-  const annCh = await interaction.client.channels.fetch(config.getAnnouncementsID());
+  const annCh = await interaction.client.channels.fetch(config.announcementsID);
   await annCh.send({ embeds: [annEmbed] });
   interaction.reply({ content: `Successfully updated release ID #${id}`, flags: MessageFlags.Ephemeral });
 }
@@ -245,7 +245,7 @@ async function handleRemove(interaction) {
   const embedTitle = 'Cancelled Release';
   const embedDsc = `<@${interaction.user.id}> removed an upcoming release`;
   const annEmbed = await buildAnnouncementEmbed(embedTitle, embedDsc, release[0].ReleaseTitle, release[0].ReleaseDate, release[0].Desc, release[0].Link, release[0].Type);
-  const annCh = await interaction.client.channels.fetch(config.getAnnouncementsID());
+  const annCh = await interaction.client.channels.fetch(config.announcementsID);
   await annCh.send({ embeds: [annEmbed] });
   await vaReleasesDB.delete(id);
   logger.info(`${username} successfully removed release ID #${id}`);

@@ -19,10 +19,10 @@ module.exports = {
 
       await handleModboard(message, modCount, payload);
 
-      const threshold = await starboardSettingsDB.getThreshold(config.getGuildID());
+      const threshold = await starboardSettingsDB.getThreshold(config.guildID);
 
       if (trueCount >= threshold) {
-        const starboardChannel = await payload.client.channels.fetch(config.getStarboardID());
+        const starboardChannel = await payload.client.channels.fetch(config.starboardID);
         if (!starboardChannel) {
           logger.error('Could not find starboard channel');
         }

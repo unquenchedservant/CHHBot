@@ -19,9 +19,9 @@ module.exports = {
     if (!valid) return 0;
     await selfpromomsgdb.add(interaction.targetMessage.id);
     let msg = `Woah there, <@${interaction.targetMessage.author.id}>,`;
-    msg += ` it looks like you're sharing self-promotion outside of <#${config.getSelfPromoID()}>!\n\n`;
+    msg += ` it looks like you're sharing self-promotion outside of <#${config.selfPromoID}>!\n\n`;
     msg += 'If you don\'t have access to that channel, please stick around and get to know us a bit. Shortly after you join you will gain access. \n\n';
-    msg += `In the meantime, check out <#${config.getRoleMenuID()}> and assign yourself the Artist/Producer tag to unlock some extra channels. Please take a minute to check out our <#${config.getRulesID()}>\n\n`;
+    msg += `In the meantime, check out <#${config.roleMenuID}> and assign yourself the Artist/Producer tag to unlock some extra channels. Please take a minute to check out our <#${config.rulesID}>\n\n`;
     msg += 'If you feel you should be a verified artist (who can self promo anywhere) feel free to reach out to the mods. Requirements: 50,000 streams on a single song *or* 10,000 monthly streams.\n\n';
     msg += 'If we don\'t know who you are, we likely won\'t care about your music.';
 
@@ -29,7 +29,7 @@ module.exports = {
       .setTitle('Please Don\'t Self-Promo')
       .setDescription(msg);
 
-    const reportChannel = await interaction.client.channels.cache.get(config.getReportID());
+    const reportChannel = await interaction.client.channels.cache.get(config.reportID);
     const reportMsg = `The following message was tagged for self-promotion by <@${interaction.user.id}:\n${interaction.targetMessage.url}\n`;
     logger.info(`${interaction.user.name} used the report self promo app command`);
     await interaction.targetMessage.reply({ embeds: [embed] });
