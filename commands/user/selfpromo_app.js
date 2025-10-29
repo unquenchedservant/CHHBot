@@ -1,11 +1,8 @@
 const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, MessageFlags } = require('discord.js');
-const SelfPromoMsgDB = require('../../db/selfpromo');
+const selfPromoMsgDB = require('../../db/selfpromo');
 const logger = require('../../utility/logger');
 const config = require('../../utility/config');
 const { checkSelfPromoValidity } = require('../../utility/utils');
-
-const selfpromomsgdb = new SelfPromoMsgDB();
-
 
 const data = new ContextMenuCommandBuilder()
   .setName('Mark Self-Promo')
@@ -17,7 +14,7 @@ module.exports = {
     const user = interaction.targetMessage.author;
     const valid = await checkSelfPromoValidity(interaction, user, 'App');
     if (!valid) return 0;
-    await selfpromomsgdb.add(interaction.targetMessage.id);
+    await selfPromoMsgDB.add(interaction.targetMessage.id);
     let msg = `Woah there, <@${interaction.targetMessage.author.id}>,`;
     msg += ` it looks like you're sharing self-promotion outside of <#${config.selfPromoID}>!\n\n`;
     msg += 'If you don\'t have access to that channel, please stick around and get to know us a bit. Shortly after you join you will gain access. \n\n';

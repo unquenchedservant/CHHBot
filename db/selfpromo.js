@@ -22,4 +22,4 @@ class SelfPromoMsgDB {
 
 }
 
-module.exports = SelfPromoMsgDB;
+module.exports = new SelfPromoMsgDB();
