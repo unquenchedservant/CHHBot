@@ -91,9 +91,9 @@ async function handleAprilFools(message) {
 
   const excludedChannels = [config.staffHelpID, config.staffID, config.staffBotID,
     config.reportID, config.staffPartnerID, config.redditID, config.starboardID,
-    902769402573881375n, config.botCommandsID, config.modLogID, 705478446075215893n,
+    '902769402573881375', config.botCommandsID, config.modLogID, '705478446075215893',
     config.announcementsID, config.partnersID, config.artistRoleMenuID,
-    776157426113970207n, config.rulesID, config.welcomeID];
+    '776157426113970207', config.rulesID, config.welcomeID];
 
   if (!message.author.bot && !excludedChannels.includes(message.channel.id)) {
     const afAllowed = [3, 8];
@@ -105,7 +105,7 @@ async function handleAprilFools(message) {
 
 async function checkIds(message) {
   const roleIds = message.member?.roles.cache.map(role => role.id) || [];
-  const allowedIDs = [489532994898362388n, 806328902217760818n, 613467520640221208n, 806563614013915176n];
+  const allowedIDs = ['489532994898362388', '806328902217760818', '613467520640221208', '806563614013915176'];
   for (const role of roleIds) {
     if (allowedIDs.includes(role)) {
       return true;

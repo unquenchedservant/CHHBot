@@ -50,7 +50,7 @@ module.exports = {
       const user = interaction.options.getUser('user');
       const reportUser = interaction.user.tag;
       const reportChannel = await interaction.client.channels.cache.get(config.reportID);
-      const replyMsg = await interaction.reply({ embeds: embed})
+      const replyMsg = await interaction.reply({ embeds: [embed]})
       const reportMsg = `<@${user}> was tagged for self-promotion by <@${reportUser}>. \n\n Jump to message:${replyMsg.url}\n`;
       await reportChannel.send(reportMsg);
     }

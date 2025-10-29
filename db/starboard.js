@@ -28,8 +28,8 @@ class StarboardSettingsDB {
   async updateChannel(guildId, starboardChannel) {
     logger.info(`Setting starboard channel to ID #${starboardChannel} for guild ID #${guildId} in starboardsettings table`);
     await db.execute(`UPDATE starboardsettings
-            SET STARBOARDCHANNEL='?'
-            WHERE GUILDID='?'`, [starboardChannel, guildId]);
+            SET STARBOARDCHANNEL=?
+            WHERE GUILDID=?`, [starboardChannel, guildId]);
   }
 
   async updateThreshold(guildId, starboardThreshold) {

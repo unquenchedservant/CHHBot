@@ -32,7 +32,7 @@ class RoleMemoryDB{
       await db.execute('UPDATE roleMemory SET ENABLED=? WHERE GUILDID=?', [newEnabled, guildID]);
     }
     else {
-      await db.execute('INSERT INTO roleMemory (GUILDID, ENABLED) VALUES (?, 1)', guildID);
+      await db.execute('INSERT INTO roleMemory (GUILDID, ENABLED) VALUES (?, 1)', [guildID]);
     }
   }
 
@@ -64,7 +64,7 @@ class RoleDB{
     const data = await db.execute('SELECT * FROM roles WHERE UID=?', [userID]);
     const roles = [];
     for (const row of data) {
-      roles.push(row[1]);
+      roles.push(row.RID);
     }
     return roles;
   }

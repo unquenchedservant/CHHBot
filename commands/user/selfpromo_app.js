@@ -14,6 +14,17 @@ module.exports = {
     const user = interaction.targetMessage.author;
     const valid = await checkSelfPromoValidity(interaction, user, 'App');
     if (!valid) return 0;
+
+    // Check if this message has already been reported
+    const alreadyReported = await selfPromoMsgDB.check(interaction.targetMessage.id);
+    if (alreadyReported) {
+      await interaction.reply({
+        content: 'This message has already been reported for self-promotion.',
+        flags: MessageFlags.Ephemeral
+      });
+      return;
+    }
+
     await selfPromoMsgDB.add(interaction.targetMessage.id);
     let msg = `Woah there, <@${interaction.targetMessage.author.id}>,`;
     msg += ` it looks like you're sharing self-promotion outside of <#${config.selfPromoID}>!\n\n`;

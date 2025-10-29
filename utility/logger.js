@@ -26,7 +26,7 @@ class Logger {
     const botName = isDev() ? 'CHHBOT_DEV' : 'CHHBOT_PROD';
     const logEntry = `${timestamp} - ${botName} - ${level} - ${message}`;
     console.log(logEntry);
-    this.queue.push(logEntry);
+    this.queue.push(logEntry + '\n');
     if(!this.isWriting){
       this._flushQueue();
     }

@@ -34,7 +34,7 @@ class BirthdayDB {
     const data = await db.execute('SELECT * FROM birthdays WHERE USERID = ?', [userID]);
     const { sql, params } = data.length === 0
       ? { sql: 'INSERT INTO birthdays (USERID, MONTH, DAY, ACTIVE) VALUES (?, ?, ?, 1)', params: [userID, month, day] }
-      : { sql: 'UPDATE birthdays SET MONTH=${month}, DAY=${day}, ACTIVE=1 WHERE USERID=${userID}', params: [month, day, userID] };
+      : { sql: 'UPDATE birthdays SET MONTH=?, DAY=?, ACTIVE=1 WHERE USERID=?', params: [month, day, userID] };
     await db.execute(sql, params);
   }
 
@@ -45,7 +45,7 @@ class BirthdayDB {
   }
 
   async check(month, day) {
-    logger.info('Checking if any birthdays on ${month}/${day}');
+    logger.info(`Checking if any birthdays on ${month}/${day}`);
     const data = await db.execute('SELECT USERID, ACTIVE FROM birthdays WHERE MONTH=? AND DAY=?', [month, day]);
     const birthdayIDs = [];
     if (data) {

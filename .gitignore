@@ -29,3 +29,5 @@ startup.sh
 startup.sh
 CLAUDE.md
 .github/*
+chh.db-shm
+chh.db-wal

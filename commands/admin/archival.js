@@ -103,7 +103,7 @@ module.exports = {
     }
     else if (interaction.options.getSubcommand() === 'remove') {
       logger.info(`'/archive remove' was called by ${interaction.user.tag}`);
-      const check = archivalDB.check(interaction.options.getChannel('channel').id);
+      const check = await archivalDB.check(interaction.options.getChannel('channel').id);
       if (check.length > 0) {
         await archivalDB.remove(interaction.options.getChannel('channel').id);
         await interaction.reply({ content: `Successfully removed ${interaction.options.getChannel('channel').name} from the DB, please move it manually and sync permissions if applicable` });

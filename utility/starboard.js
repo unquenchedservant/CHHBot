@@ -102,13 +102,15 @@ async function addToStarboard(message, trueCount, starboardChannel) {
 }
 
 async function updateStarboard(message, trueCount, starboardChannel) {
-  const starboardMsg = await starboardChannel.fetch(starboardDB.get(message.id));
-  const embed = createEmbed(message, trueCount);
+  const starboardMsgID = await starboardDB.get(message.id);
+  const starboardMsg = await starboardChannel.messages.fetch(starboardMsgID);
+  const embed = await createEmbed(message, trueCount);
   await starboardMsg.edit({ embeds: [embed] });
 }
 
 async function removeFromStarboard(message, starboardChannel) {
-  const starboardMsg = await starboardChannel.fetch(starboardDB.get(message.id));
+  const starboardMsgID = await starboardDB.get(message.id);
+  const starboardMsg = await starboardChannel.messages.fetch(starboardMsgID);
   await starboardMsg.delete();
   starboardDB.remove(message.id);
 }

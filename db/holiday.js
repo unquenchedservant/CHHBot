@@ -18,15 +18,15 @@ class HolidayDB{
     let sql = '';
     let params = []
     const data = await db.execute('SELECT * FROM holidays WHERE MONTH=? AND DAY=?', [month, day]);
-    if (data) {
+    if (data.length === 0) {
       logger.info(`Adding holiday on ${month}/${day} with ${msg} to holidays table`);
-      sql = `INSERT INTO holidays (MONTH, DAY, MSG) VALUES (?, ?, '?')`;
+      sql = `INSERT INTO holidays (MONTH, DAY, MSG) VALUES (?, ?, ?)`;
       params = [month, day, msg];
     }
     else {
       updated = true;
       logger.info(`Updated holiday on ${month}/${day} with ${msg} to holidays table`);
-      sql = 'UPDATE holidays SET MSG=\'?\' WHERE MONTH=? AND DAY=?';
+      sql = 'UPDATE holidays SET MSG=? WHERE MONTH=? AND DAY=?';
       params = [msg, month, day];
     }
     await db.execute(sql, params);
