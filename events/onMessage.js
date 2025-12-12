@@ -129,11 +129,43 @@ async function handleStick(message) {
   }
 }
 
+async function handleSpam(message){
+  if (!checkIds(message)){
+    var re = []
+    re.push(new RegExp("[a-zA-Z0-9]*discord.gg\/*"));
+    re.push(new RegExp("[a-zA-Z0-9]*discord.com\/invite*"));
+    re.push(new RegExp("[a-zA-Z0-0]*onlyfans.[a-zA-Z0-9]*\./*"));
+    re.push(new RegExp("[a-zA-Z0-9]*discordapp.com\/invite\/[a-zA-Z0-9_]*"));
+    let dresult = /[a-zA-Z0-9]*discordapp.com\/invite\/[a-zA-Z0-9_]*/.exec(message.content);
+    const DISCORD_INVITE_MSG = `Your message was removed from #${message.channel.name} in CHHCord for containing a Discord invite link.\n\nUnfortunately, a lot of spam comes in the form of Discord invite links. \nIf legitimate, please direct message the person directly with the invite link.\n\n IF YOU DID NOT SEND ANY DISCORD INVITE LINK YOU MAY HAVE BEEN HACKED. PLEASE CHANGE YOUR PASSWORD`;
+    const ONLYFANS_MSG = `Your message was removed from #${message.channel.name} in CHHCord for containing an OnlyFans link.\n\nMost likely, this wasn't actually you, and you may have been hacked.\n\nPlease change your password and enable 2FA ASAP if this wasn't you.\nDM Chill if you think this was an error.`
+    let user = message.author;
+    if (!dresult == ""){
+      user.send(DISCORD_INVITE_MSG);
+    }
+    dresult = /[a-zA-Z0-9]*discord.com\/invite*/.exec(message.content);
+    if (!dresult == ""){
+      user.send(DISCORD_INVITE_MSG);
+    }
+    let result = RegExp("[a-zA-Z0-0]*onlyfans.[a-zA-Z0-9]*\./*").exec(message.content);
+    if(!result == ""){
+      user.send(ONLYFANS_MSG)
+    }
+  }else {
+    let user = message.author
+    let result = RegExp("[a-zA-Z0-0]*onlyfans.[a-zA-Z0-9]*\./*").exec(message.content);
+    const ONLYFANS_MSG="Why are you, a mod, sending onlyfans links in CHHCord? sus."
+    if(!result == ""){
+      user.send(ONLYFANS_MSG)
+    }
+  }
+}
 
 module.exports = {
   name: Events.MessageCreate,
   once: false,
   async execute(message) {
+    await handleSpam(message);
     await handleBen(message);
     await handleSocks(message);
     await handleVro(message);
